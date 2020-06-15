@@ -1,4 +1,5 @@
-# TTT Discord Bot ![Icon](https://raw.githubusercontent.com/manix84/ttt_discord_bot/master/images/icon/icon_64x.png)
+![Icon](https://raw.githubusercontent.com/manix84/discord_gmod_bot/master/images/icon/icon_64x.png)
+# Discord GMod Addon
 
 >Dead players tell no tales!
 
