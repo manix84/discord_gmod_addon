@@ -38,7 +38,7 @@ xlib.maketextbox{ x=320, y=60, w=250, h=20, label="Invitation Link", repconvar="
 xlib.makecheckbox{ x=170, y=90, label="Connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discordbot_settings.main, textcolor=color_black }
 
 xlib.makecheckbox{ x=170, y=175, label="Mute Until Round End", repconvar="rep_discordbot_mute_round", parent=discordbot_settings.main, textcolor=color_black }
-xlib.makeslider{ x=170, y=195, w=225, min=0.1, max=60, decimal=1, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discordbot_settings.main, textcolor=color_black }
+xlib.makeslider{ x=170, y=195, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discordbot_settings.main, textcolor=color_black }
 
 -- discordbot_settings.main.mask = xlib.makepanel{ x=295, y=5, w=290, h=322, parent=discordbot_settings.main }
 -- discordbot_settings.main.panel = xlib.makepanel{ x=5, w=285, h=322, parent=discordbot_settings.main.mask }

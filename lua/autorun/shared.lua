@@ -22,7 +22,7 @@ CreateConVar("discordbot_endpoint", "http://localhost:37405", 1, "Sets the node 
 CreateConVar("discordbot_name", "GMod Discord Bot", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
 CreateConVar("discordbot_server_link", "https://discord.gg/", 1, "Sets the Discord server your bot is present on (eg: https://discord.gg/aBc123).")
 CreateConVar("discordbot_mute_round", 1, 1, "Mute the player until the end of the round.", 0, 1)
-CreateConVar("discordbot_mute_duration", 0, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 0, 60)
+CreateConVar("discordbot_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
 CreateConVar("discordbot_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
 FILEPATH = "gmod_discord_bot.dat"
@@ -91,7 +91,7 @@ function mute(ply)
           --PrintTable(res)
           if (res.success) then
             if (!GetConVar("discordbot_mute_round"):GetBool()) then
-              print_message("You're muted for "..GetConVar("discordbot_mute_duration"):GetFloat().." seconds!", ply)
+              print_message("You're muted for "..GetConVar("discordbot_mute_duration"):GetInt().." seconds!", ply)
             else
               print_message("You're muted in discord!", ply)
             end
@@ -231,7 +231,7 @@ hook.Add("PostPlayerDeath", "gmod_discord_bot_PostPlayerDeath", function(ply)
   if (commonRoundState() == 1) then
     mute(ply)
     if (!GetConVar("discordbot_mute_round"):GetBool()) then
-      timer.Simple(GetConVar("discordbot_mute_duration"):GetFloat(), function() unmute(ply) end)
+      timer.Simple(GetConVar("discordbot_mute_duration"):GetInt(), function() unmute(ply) end)
     end
   end
 end)
