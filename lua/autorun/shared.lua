@@ -50,7 +50,7 @@ end
 
 function httpFetch(req, params, cb, tries)
   httpAdress = GetConVar("discordbot_endpoint"):GetString()
-  http.Fetch(httpAdress,
+  http.Fetch(httpAdress..'/'..req,
     function(res)
       --print(res)
       cb(util.JSONToTable(res))
@@ -59,8 +59,8 @@ function httpFetch(req, params, cb, tries)
       print_message("Request to bot failed. Is the bot running?")
       print_message("Err: "..err)
       if (!tries) then tries = TRIES end
-      if (tries != 0) then httpFetch(req,params,cb, tries-1) end
-    end, {req=req,params=util.TableToJSON(params)}
+      if (tries != 0) then httpFetch(req, params, cb, tries-1) end
+    end, {req=req, params=util.TableToJSON(params)}
   )
 end
 
