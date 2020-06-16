@@ -207,6 +207,17 @@ hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(p
   end
 end)
 
+hook.Add("MutePlayer", "gmod_discord_bot_MutePlayer", function(ply, duration)
+  if (duration > 0) then
+    mute(ply, duration)
+  else
+    mute(ply)
+  end
+end)
+hook.Add("UnmutePlayer", "gmod_discord_bot_UnmutePlayer", function(ply)
+  unmute(ply)
+end)
+
 hook.Add("PlayerSpawn", "gmod_discord_bot_PlayerSpawn", function(ply)
   unmute(ply)
 end)
