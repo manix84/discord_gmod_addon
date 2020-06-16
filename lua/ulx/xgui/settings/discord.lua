@@ -1,7 +1,7 @@
 --GMod Discord Bot Server settings module for ULX GUI -- by Manxi84
 --  A settings module for modifying server settings for GMod Discord Bot.
 
-local FILEPATH = "ttt_discord_bot.dat"
+local FILEPATH = "gmod_discord_bot.dat"
 local ids = {}
 
 ids_raw = file.Read( FILEPATH, "DATA" )
@@ -26,16 +26,16 @@ discordbot_settings.main.catList.Columns[1].DoClick = function() end
 discordbot_settings.main.panel = xlib.makepanel{ x=160, y=5, w=420, h=318, parent=discordbot_settings.main }
 
 
-xlib.makelabel{ x=170, y=10, w=80, h=20, label="Bot Name", parent=discordbot_settings.main, textcolor=color_black }
-xlib.maketextbox{ x=320, y=10, w=250, h=20, label="Bot Name", repconvar="rep_discordbot_name", parent=discordbot_settings.main, textcolor=color_black }
+xlib.makelabel{ x=170, y=10, w=140, h=20, label="Message Prefix", parent=discordbot_settings.main, textcolor=color_black }
+xlib.maketextbox{ x=320, y=10, w=250, h=20, label="Message Prefix", repconvar="rep_discordbot_name", parent=discordbot_settings.main, textcolor=color_black }
 
-xlib.makelabel{ x=170, y=35, w=80, h=20, label="Bot Endpoint", parent=discordbot_settings.main, textcolor=color_black }
+xlib.makelabel{ x=170, y=35, w=140, h=20, label="Bot Endpoint", parent=discordbot_settings.main, textcolor=color_black }
 xlib.maketextbox{ x=320, y=35, w=250, h=20, label="Bot Endpoint", repconvar="rep_discordbot_endpoint", parent=discordbot_settings.main, textcolor=color_black }
 
-xlib.makelabel{ x=170, y=60, w=80, h=20, label="Invitation Link", parent=discordbot_settings.main, textcolor=color_black }
-xlib.maketextbox{ x=320, y=60, w=250, h=20, label="Invitation Link", repconvar="rep_discordbot_server_link", parent=discordbot_settings.main, textcolor=color_black }
+xlib.makelabel{ x=170, y=60, w=140, h=20, label="Discord Invitation Link", parent=discordbot_settings.main, textcolor=color_black }
+xlib.maketextbox{ x=320, y=60, w=250, h=20, label="Discord Invitation Link", repconvar="rep_discordbot_server_link", parent=discordbot_settings.main, textcolor=color_black }
 
-xlib.makecheckbox{ x=170, y=90, label="Connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discordbot_settings.main, textcolor=color_black }
+xlib.makecheckbox{ x=170, y=90, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discordbot_settings.main, textcolor=color_black }
 
 xlib.makecheckbox{ x=170, y=175, label="Mute Until Round End", repconvar="rep_discordbot_mute_round", parent=discordbot_settings.main, textcolor=color_black }
 xlib.makeslider{ x=170, y=195, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discordbot_settings.main, textcolor=color_black }
