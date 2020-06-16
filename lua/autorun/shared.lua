@@ -91,7 +91,7 @@ function mute(ply, duration)
           --PrintTable(res)
           if (res.success) then
             if (duration) then
-              print_message("You're muted for "..duration.." seconds.", ply)
+              print_message("You're muted in discord for "..duration.." seconds.", ply)
               timer.Simple(duration, function() unmute(ply) end)
             else
               print_message("You're muted in discord until the round ends.", ply)
@@ -100,7 +100,7 @@ function mute(ply, duration)
             muted[ply] = true
           end
           if (res.error) then
-            print_message("["..GetConVar("discordbot_name"):GetString().."] ".."Error: "..res.err)
+            print_message("Error: "..res.err)
           end
         end
       end)
@@ -121,7 +121,7 @@ function unmute(ply)
             muted[ply] = false
           end
           if (res.error) then
-            print("["..GetConVar("discordbot_name"):GetString().."] ".."Error: "..res.err)
+            print("Error: "..res.err)
           end
         end)
       end
