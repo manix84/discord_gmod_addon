@@ -1,5 +1,3 @@
---painful file to create will all ttt cvars
-
 local function init()
   --Preparation and post-round
   ULib.replicatedWritableCvar( "discordbot_endpoint", "rep_discordbot_endpoint", GetConVarNumber( "discordbot_endpoint" ), false, false, "xgui_gmsettings" )

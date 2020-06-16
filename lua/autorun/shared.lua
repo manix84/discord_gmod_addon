@@ -40,6 +40,16 @@ function saveIDs()
   file.Write( FILEPATH, util.TableToJSON(ids))
 end
 
+function addPlayerID(ply, id)
+  ids[ply:SteamID()] = id
+  saveIDs()
+end
+
+function removePlayerID(ply)
+  ids[ply:SteamID()] = nil
+  saveIDs()
+end
+
 function print_message(message, ply)
   if (!ply) then
     PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
@@ -70,15 +80,6 @@ function sendClientIconInfo(ply, mute)
   net.Send(ply)
 end
 
---[[
-function isMuted(ply)
-  for i,v in ipairs(muted) do
-    if ply == v then return
-      true
-    end
-  end
-  return false
-end]]
 function isMuted(ply)
   return muted[ply]
 end
@@ -161,6 +162,7 @@ if (string.sub(msg,1,9) != '!discord ') then
   end
   return ""
 end
+  
   tag = string.sub(msg,10)
   tag_utf8 = ""
 
@@ -194,9 +196,8 @@ hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(p
       httpFetch("connect", {tag=tag_utf8}, function(res)
      	 -- print_message("Attempting to match your name, "..tag)
         if (res.tag and res.id) then
-          print_message("Discord tag '"..res.tag.."' successfully boundet to SteamID '"..ply:SteamID().."'", ply)
-          ids[ply:SteamID()] = res.id
-          saveIDs()
+          print_message("Discord tag '"..res.tag.."' successfully bound to SteamID '"..ply:SteamID().."'", ply)
+          addPlayerID(ply, res.id)
         else
           joinMessage(ply)
         end
@@ -205,6 +206,18 @@ hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(p
       joinMessage(ply)
     end
   end
+end)
+
+hook.Add("ConnectPlayer_ID", "gmod_discord_bot_ConnectPlayer_ID", function(ply, discordID)
+  addPlayerID(ply, discordID)
+end)
+
+hook.Add("ConnectPlayer_Name", "gmod_discord_bot_ConnectPlayer_Name", function(ply, discordName)
+
+end)
+
+hook.Add("DisconnectPlayer", "gmod_discord_bot_RemovePlayer", function(ply)
+  removePlayerID(ply)
 end)
 
 hook.Add("MutePlayer", "gmod_discord_bot_MutePlayer", function(ply, duration)
