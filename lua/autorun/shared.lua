@@ -83,17 +83,18 @@ function isMuted(ply)
   return muted[ply]
 end
 
-function mute(ply)
+function mute(ply, duration)
   if (ids[ply:SteamID()]) then
     if (!isMuted(ply)) then
       httpFetch("mute", {mute=true,id=ids[ply:SteamID()]}, function(res)
         if (res) then
           --PrintTable(res)
           if (res.success) then
-            if (!GetConVar("discordbot_mute_round"):GetBool()) then
-              print_message("You're muted for "..GetConVar("discordbot_mute_duration"):GetInt().." seconds!", ply)
+            if (duration) then
+              print_message("You're muted for "..duration.." seconds.", ply)
+              timer.Simple(duration, function() unmute(ply) end)
             else
-              print_message("You're muted in discord!", ply)
+              print_message("You're muted in discord until the round ends.", ply)
             end
             sendClientIconInfo(ply, true)
             muted[ply] = true
@@ -229,9 +230,10 @@ hook.Add("OnStartRound", "gmod_discord_bot_OnStartRound", function()
 end)
 hook.Add("PostPlayerDeath", "gmod_discord_bot_PostPlayerDeath", function(ply)
   if (commonRoundState() == 1) then
-    mute(ply)
-    if (!GetConVar("discordbot_mute_round"):GetBool()) then
-      timer.Simple(GetConVar("discordbot_mute_duration"):GetInt(), function() unmute(ply) end)
+    if (GetConVar("discordbot_mute_round"):GetBool()) then
+      mute(ply)
+    else
+      mute(ply, GetConVar("discordbot_mute_duration"):GetInt())
     end
   end
 end)
