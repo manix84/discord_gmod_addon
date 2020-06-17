@@ -156,12 +156,12 @@ function joinMessage(ply)
 end
 
 hook.Add("PlayerSay", "gmod_discord_bot_PlayerSay", function(ply, msg)
-if (string.sub(msg,1,9) != '!discord ') then
-  if (string.sub(msg,1,8) == '!discord') then
-    joinMessage(ply)
+  if (string.sub(msg,1,9) != '!discord ') then
+    if (string.sub(msg,1,8) == '!discord') then
+      joinMessage(ply)
+    end
+    return ""
   end
-  return ""
-end
   
   tag = string.sub(msg,10)
   tag_utf8 = ""
