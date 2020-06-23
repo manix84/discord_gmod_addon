@@ -8,7 +8,7 @@ if (CLIENT) then
     drawMute = net.ReadBool()
   end)
 
-  hook.Add( "HUDPaint", "gmod_discord_bot_HUDPaint", function()
+  hook.Add( "HUDPaint", "discord_bot_commands_HUDPaint", function()
     if (!drawMute) then return end
     surface.SetDrawColor(176, 40, 40, 255)
     surface.SetMaterial(muteIcon)
@@ -25,37 +25,56 @@ CreateConVar("discordbot_mute_round", 1, 1, "Mute the player until the end of th
 CreateConVar("discordbot_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
 CreateConVar("discordbot_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
-FILEPATH = "gmod_discord_bot.dat"
+FILEPATH = "discord_connection_cache"
 TRIES = 3
 
 muted = {}
-
-ids = {}
-ids_raw = file.Read( FILEPATH, "DATA" )
-if (ids_raw) then
-  ids = util.JSONToTable(ids_raw)
-end
-
-function saveIDs()
-  file.Write( FILEPATH, util.TableToJSON(ids))
-end
-
-function addPlayerID(ply, id)
-  ids[ply:SteamID()] = id
-  saveIDs()
-end
-
-function removePlayerID(ply)
-  ids[ply:SteamID()] = nil
-  saveIDs()
-end
+connectionIDs = {}
 
 function print_message(message, ply)
   if (!ply) then
     PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
   else
     ply:PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
+end
+end
+
+function backupConnectionIDs(connectionIDs)
+  local Timestamp = os.time()
+  local TimeString = os.date( "%Y%m%d%H" , Timestamp )
+  local backupFileName = FILEPATH..'_BACKUP_'..TimeString
+  file.Write( backupFileName..'.json', util.TableToJSON(connectionIDs))
+  print_message("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
+end
+
+
+function getConnectionIDs()
+  if (table.Count(connectionIDs) == 0) then
+    local rawConnectionIDsFromCache = file.Read( FILEPATH..'.json', "DATA" )
+    if (rawConnectionIDsFromCache) then
+      connectionIDs = util.JSONToTable(rawConnectionIDsFromCache)
+end
   end
+  hook.Run("discordConnectionIDsCache_Updated", connectionIDs)
+  return connectionIDs
+end
+connectionIDs = getConnectionIDs()
+backupConnectionIDs(connectionIDs)
+
+
+function writeConnectionIDs(connectionIDs)
+  file.Write( FILEPATH..'.json', util.TableToJSON(connectionIDs))
+  hook.Run("discordConnectionIDsCache_Updated", connectionIDs)
+end
+
+function addConnectionID(ply, id)
+  connectionIDs[ply:SteamID()] = id
+  writeConnectionIDs(connectionIDs)
+  end
+
+function removeConnectionID(ply)
+  connectionIDs[ply:SteamID()] = nil
+  writeConnectionIDs(connectionIDs)
 end
 
 function httpFetch(req, params, cb, tries)
@@ -85,9 +104,9 @@ function isMuted(ply)
 end
 
 function mute(ply, duration)
-  if (ids[ply:SteamID()]) then
+  if (connectionIDs[ply:SteamID()]) then
     if (!isMuted(ply)) then
-      httpFetch("mute", {mute=true,id=ids[ply:SteamID()]}, function(res)
+      httpFetch("mute", {mute=true, id=connectionIDs[ply:SteamID()]}, function(res)
         if (res) then
           --PrintTable(res)
           if (res.success) then
@@ -111,14 +130,14 @@ end
 
 function unmute(ply)
   if (ply) then
-    if (ids[ply:SteamID()]) then
+    if (connectionIDs[ply:SteamID()]) then
       if (isMuted(ply)) then
-        httpFetch("mute", {mute=false,id=ids[ply:SteamID()]}, function(res)
+        httpFetch("mute", {mute=false, id=connectionIDs[ply:SteamID()]}, function(res)
           if (res.success) then
             if (ply) then
               print_message("You're no longer muted in discord!", ply)
             end
-            sendClientIconInfo(ply,false)
+            sendClientIconInfo(ply, false)
             muted[ply] = false
           end
           if (res.error) then
@@ -155,7 +174,7 @@ function joinMessage(ply)
   print_message("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
-hook.Add("PlayerSay", "gmod_discord_bot_PlayerSay", function(ply, msg)
+hook.Add("PlayerSay", "discord_bot_commands_PlayerSay", function(ply, msg)
   if (string.sub(msg,1,9) != '!discord ') then
     if (string.sub(msg,1,8) == '!discord') then
       joinMessage(ply)
@@ -174,15 +193,15 @@ hook.Add("PlayerSay", "gmod_discord_bot_PlayerSay", function(ply, msg)
     if (res.answer == 1) then print_message("Found more than one user with a discord tag like '"..tag.."'. Try your full tag, EG: Manix84#1234", ply) end
     if (res.tag and res.id) then
       print_message("Discord tag '"..res.tag.."' successfully boundet to SteamID '"..ply:SteamID().."'", ply) --lie! actually the discord id is bound! ;)
-      ids[ply:SteamID()] = res.id
-      saveIDs()
+      connectionIDs[ply:SteamID()] = res.id
+      writeConnectionIDs(connectionIDs)
     end
   end)
   return ""
 end)
 
-hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(ply)
-  if (ids[ply:SteamID()]) then
+hook.Add("PlayerInitialSpawn", "discord_bot_commands_PlayerInitialSpawn", function(ply)
+  if (connectionIDs[ply:SteamID()]) then
     print_message("You are connected with discord.", ply)
   else
     if (GetConVar("discordbot_auto_connect"):GetBool()) then
@@ -197,7 +216,7 @@ hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(p
      	 -- print_message("Attempting to match your name, "..tag)
         if (res.tag and res.id) then
           print_message("Discord tag '"..res.tag.."' successfully bound to SteamID '"..ply:SteamID().."'", ply)
-          addPlayerID(ply, res.id)
+          addConnectionID(ply, res.id)
         else
           joinMessage(ply)
         end
@@ -208,56 +227,57 @@ hook.Add("PlayerInitialSpawn", "gmod_discord_bot_PlayerInitialSpawn", function(p
   end
 end)
 
-hook.Add("ConnectPlayer_ID", "gmod_discord_bot_ConnectPlayer_ID", function(ply, discordID)
-  addPlayerID(ply, discordID)
+hook.Add("ConnectPlayer", "discord_bot_commands_ConnectPlayer", function(ply, discordID)
+  addConnectionID(ply, discordID)
 end)
 
-hook.Add("ConnectPlayer_Name", "gmod_discord_bot_ConnectPlayer_Name", function(ply, discordName)
+hook.Add("ConnectPlayer_Name", "discord_bot_commands_ConnectPlayer_ByName", function(ply, discordName)
 
 end)
 
-hook.Add("DisconnectPlayer", "gmod_discord_bot_RemovePlayer", function(ply)
-  removePlayerID(ply)
+hook.Add("DisconnectPlayer", "discord_bot_commands_DisconnectPlayer", function(ply)
+  removeConnectionID(ply)
 end)
 
-hook.Add("MutePlayer", "gmod_discord_bot_MutePlayer", function(ply, duration)
+hook.Add("MutePlayer", "discord_bot_commands_MutePlayer", function(ply, duration)
   if (duration > 0) then
     mute(ply, duration)
   else
     mute(ply)
   end
 end)
-hook.Add("UnmutePlayer", "gmod_discord_bot_UnmutePlayer", function(ply)
+hook.Add("UnmutePlayer", "discord_bot_commands_UnmutePlayer", function(ply)
   unmute(ply)
 end)
 
-hook.Add("PlayerSpawn", "gmod_discord_bot_PlayerSpawn", function(ply)
+hook.Add("PlayerSpawn", "discord_bot_commands_PlayerSpawn", function(ply)
   unmute(ply)
 end)
-hook.Add("PlayerDisconnected", "gmod_discord_bot_PlayerDisconnected", function(ply)
+hook.Add("PlayerDisconnected", "discord_bot_commands_PlayerDisconnected", function(ply)
   unmute(ply)
 end)
-hook.Add("ShutDown", "gmod_discord_bot_ShutDown", function()
+hook.Add("ShutDown", "discord_bot_commands_ShutDown", function()
   unmute()
 end)
-hook.Add("TTTEndRound", "gmod_discord_bot_TTTEndRound", function()
+hook.Add("TTTEndRound", "discord_bot_commands_TTTEndRound", function()
   timer.Simple(0.1, function() unmute() end)
 end)
-hook.Add("TTTBeginRound", "gmod_discord_bot_TTTBeginRound", function()--in case of round-restart via command
+hook.Add("TTTBeginRound", "discord_bot_commands_TTTBeginRound", function()--in case of round-restart via command
   unmute()
 end)
-hook.Add("OnEndRound", "gmod_discord_bot_OnEndRound", function()
+hook.Add("OnEndRound", "discord_bot_commands_OnEndRound", function()
   timer.Simple(0.1, function() unmute() end)
 end)
-hook.Add("OnStartRound", "gmod_discord_bot_OnStartRound", function()
+hook.Add("OnStartRound", "discord_bot_commands_OnStartRound", function()
   unmute()
 end)
-hook.Add("PostPlayerDeath", "gmod_discord_bot_PostPlayerDeath", function(ply)
+hook.Add("PostPlayerDeath", "discord_bot_commands_PostPlayerDeath", function(ply)
   if (commonRoundState() == 1) then
     if (GetConVar("discordbot_mute_round"):GetBool()) then
       mute(ply)
     else
-      mute(ply, GetConVar("discordbot_mute_duration"):GetInt())
+      local duration = GetConVar("discordbot_mute_duration"):GetInt()
+      mute(ply, duration)
     end
   end
 end)
