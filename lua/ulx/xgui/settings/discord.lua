@@ -10,49 +10,49 @@ discord.catList:AddColumn( "Discord Settings" )
 discord.catList.Columns[1].DoClick = function() end
 
 discord.catList.OnRowSelected = function( self, LineID, Line )
-	local nPanel = xgui.modules.submodule[Line:GetValue(2)].panel
-	if nPanel ~= discord.curPanel then
-		nPanel:SetZPos( 0 )
-		xlib.addToAnimQueue( "pnlSlide", { panel=nPanel, startx=-435, starty=0, endx=0, endy=0, setvisible=true } )
-		if discord.curPanel then
-			discord.curPanel:SetZPos( -1 )
-			xlib.addToAnimQueue( discord.curPanel.SetVisible, discord.curPanel, false )
-		end
-		xlib.animQueue_start()
-		discord.curPanel = nPanel
-	else
-		xlib.addToAnimQueue( "pnlSlide", { panel=nPanel, startx=0, starty=0, endx=-435, endy=0, setvisible=false } )
-		self:ClearSelection()
-		discord.curPanel = nil
-		xlib.animQueue_start()
-	end
-	if nPanel.onOpen then nPanel.onOpen() end --If the panel has it, call a function when it's opened
+  local nPanel = xgui.modules.submodule[Line:GetValue(2)].panel
+  if nPanel ~= discord.curPanel then
+    nPanel:SetZPos( 0 )
+    xlib.addToAnimQueue( "pnlSlide", { panel=nPanel, startx=-435, starty=0, endx=0, endy=0, setvisible=true } )
+    if discord.curPanel then
+      discord.curPanel:SetZPos( -1 )
+      xlib.addToAnimQueue( discord.curPanel.SetVisible, discord.curPanel, false )
+    end
+    xlib.animQueue_start()
+    discord.curPanel = nPanel
+  else
+    xlib.addToAnimQueue( "pnlSlide", { panel=nPanel, startx=0, starty=0, endx=-435, endy=0, setvisible=false } )
+    self:ClearSelection()
+    discord.curPanel = nil
+    xlib.animQueue_start()
+  end
+  if nPanel.onOpen then nPanel.onOpen() end --If the panel has it, call a function when it's opened
 end
 
 --Process modular settings
 function discord.processModules()
-	discord.catList:Clear()
-	for i, module in ipairs( xgui.modules.submodule ) do
-		if module.mtype == "discord" and ( not module.access or LocalPlayer():query( module.access ) ) then
-			local w,h = module.panel:GetSize()
-			if w == h and h == 0 then module.panel:SetSize( 275, 322 ) end
-			
-			if module.panel.scroll then --For DListLayouts
-				module.panel.scroll.panel = module.panel
-				module.panel = module.panel.scroll
+  discord.catList:Clear()
+  for i, module in ipairs( xgui.modules.submodule ) do
+    if module.mtype == "discord" and ( not module.access or LocalPlayer():query( module.access ) ) then
+      local w,h = module.panel:GetSize()
+      if w == h and h == 0 then module.panel:SetSize( 275, 322 ) end
+      
+      if module.panel.scroll then --For DListLayouts
+        module.panel.scroll.panel = module.panel
+        module.panel = module.panel.scroll
       end --if
-			module.panel:SetParent( discord.panel )
-			
-			local line = discord.catList:AddLine( module.name, i )
-			if ( module.panel == discord.curPanel ) then
-				discord.curPanel = nil
-				discord.catList:SelectItem( line )
-			else
-				module.panel:SetVisible( false )
+      module.panel:SetParent( discord.panel )
+      
+      local line = discord.catList:AddLine( module.name, i )
+      if ( module.panel == discord.curPanel ) then
+        discord.curPanel = nil
+        discord.catList:SelectItem( line )
+      else
+        module.panel:SetVisible( false )
       end --if
     end --if
   end --for
-			end
+end
 discord.processModules()
 
 xgui.hookEvent( "onProcessModules", nil, discord.processModules )
