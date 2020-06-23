@@ -40,7 +40,7 @@ function discord.processModules()
 			if module.panel.scroll then --For DListLayouts
 				module.panel.scroll.panel = module.panel
 				module.panel = module.panel.scroll
-			end
+      end --if
 			module.panel:SetParent( discord.panel )
 			
 			local line = discord.catList:AddLine( module.name, i )
@@ -49,11 +49,10 @@ function discord.processModules()
 				discord.catList:SelectItem( line )
 			else
 				module.panel:SetVisible( false )
+      end --if
+    end --if
+  end --for
 			end
-		end
-	end
-	discord.catList:SortByColumn( 1, false )
-end
 discord.processModules()
 
 xgui.hookEvent( "onProcessModules", nil, discord.processModules )
@@ -64,40 +63,64 @@ local discord_settings_panel = xlib.makelistlayout{ w=415, h=318, parent=discord
 
 --Mute Options
 local discord_settings_mute_options_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
-discord_settings_mute_options_Category:SetSize( 380, 45 )
-discord_settings_mute_options_Category:SetExpanded( 1 )
+discord_settings_mute_options_Category:SetSize( 393, 45 )
+discord_settings_mute_options_Category:SetExpanded( true )
 discord_settings_mute_options_Category:SetLabel( "Mute Options" )
 
 local discord_settings_mute_options_List = vgui.Create( "DPanelList", discord_settings_mute_options_Category )
 discord_settings_mute_options_List:SetPos( 10, 25 )
-discord_settings_mute_options_List:SetSize( 380, 45 )
+discord_settings_mute_options_List:SetSize( 393, 45 )
+discord_settings_mute_options_List:EnableVerticalScrollbar( false )
 discord_settings_mute_options_List:SetSpacing( 5 )
 
-discord_settings_mute_options_List.AddItem(xlib.makecheckbox{ x=0, y=0, label="Mute Until Round End", repconvar="rep_discordbot_mute_round", parent=discord_settings_mute_options_List, textcolor=color_black })
-discord_settings_mute_options_List.AddItem(xlib.makeslider{ x=0, y=20, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discord_settings_mute_options_List, textcolor=color_black })
+local mute_round = xlib.makecheckbox{ x=0, y=0, label="Mute Until Round End", repconvar="rep_discordbot_mute_round", parent=discord_settings_mute_options_List }
+discord_settings_mute_options_List.AddItem(mute_round)
 
---Settings
+local mute_duration = xlib.makeslider{ x=0, y=20, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discord_settings_mute_options_List }
+function mute_round.OnChange()
+  mute_duration:SetDisabled( mute_round:GetChecked() )
+end
+mute_duration:SetDisabled( mute_round:GetChecked() )
+
+discord_settings_mute_options_List.AddItem(mute_duration)
+
+--Config
 local discord_settings_config_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
-discord_settings_config_Category:SetSize( 380, 95 )
-discord_settings_config_Category:SetExpanded( 0 )
+discord_settings_config_Category:SetSize( 393, 75 )
+discord_settings_config_Category:SetExpanded( false )
 discord_settings_config_Category:SetLabel( "Config" )
 
 local discord_settings_config_List = vgui.Create( "DPanelList", discord_settings_config_Category )
 discord_settings_config_List:SetPos( 10, 25 )
-discord_settings_config_List:SetSize( 380, 95 )
+discord_settings_config_List:SetSize( 393, 75 )
+discord_settings_config_List:EnableVerticalScrollbar( false )
 discord_settings_config_List:SetSpacing( 5 )
 
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Message Prefix", parent=discord_settings_config_List, textcolor=color_black })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=230, h=20, label="Message Prefix", repconvar="rep_discordbot_name", parent=discord_settings_config_List, textcolor=color_black })
+discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Message Prefix", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Message Prefix", repconvar="rep_discordbot_name", parent=discord_settings_config_List })
 
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot Endpoint", parent=discord_settings_config_List, textcolor=color_black })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=230, h=20, label="Node Bot Endpoint", repconvar="rep_discordbot_endpoint", parent=discord_settings_config_List, textcolor=color_black })
+discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discordbot_server_link", parent=discord_settings_config_List })
 
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=50, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List, textcolor=color_black })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=50, w=230, h=20, label="Discord Invitation Link", repconvar="rep_discordbot_server_link", parent=discord_settings_config_List, textcolor=color_black })
+discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=55, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discord_settings_config_List })
 
-discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=75, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discord_settings_config_List, textcolor=color_black })
+--Bot Connection
+local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
+discord_botConnection_Category:SetSize( 393, 25 )
+discord_botConnection_Category:SetExpanded( false )
+discord_botConnection_Category:SetLabel( "Bot Connection (Don't Open On Stream!)" )
 
+local discord_botConnection_List = vgui.Create( "DPanelList", discord_botConnection_Category )
+discord_botConnection_List:SetPos( 10, 25 )
+discord_botConnection_List:SetSize( 393, 25 )
+discord_botConnection_List:EnableVerticalScrollbar( false )
+discord_botConnection_List:SetSpacing( 5 )
+
+discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Node Bot Endpoint", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Node Bot Endpoint", repconvar="rep_discordbot_endpoint", parent=discord_botConnection_List })
+
+-- discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot API-Key", parent=discord_botConnection_List })
+-- discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Node Bot API-Key", repconvar="rep_discordbot_api_key", parent=discord_botConnection_List })
 
 xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
 xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
