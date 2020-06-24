@@ -1,4 +1,5 @@
-AddCSLuaFile()
+include('utils.lua')
+
 resource.AddFile("materials/icon128/mute.png")
 if (CLIENT) then
   drawMute = false
@@ -25,73 +26,11 @@ CreateConVar("discordbot_mute_round", 1, 1, "Mute the player until the end of th
 CreateConVar("discordbot_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
 CreateConVar("discordbot_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
-FILEPATH = "discord_connection_cache"
-TRIES = 3
-
 muted = {}
-connectionIDs = {}
 
-function print_message(message, ply)
-  if (!ply) then
-    PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
-  else
-    ply:PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
-end
-end
-
-function backupConnectionIDs(connectionIDs)
-  local Timestamp = os.time()
-  local TimeString = os.date( "%Y%m%d%H" , Timestamp )
-  local backupFileName = FILEPATH..'_BACKUP_'..TimeString
-  file.Write( backupFileName..'.json', util.TableToJSON(connectionIDs))
-  print_message("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
-end
-
-
-function getConnectionIDs()
-  if (table.Count(connectionIDs) == 0) then
-    local rawConnectionIDsFromCache = file.Read( FILEPATH..'.json', "DATA" )
-    if (rawConnectionIDsFromCache) then
-      connectionIDs = util.JSONToTable(rawConnectionIDsFromCache)
-end
-  end
-  hook.Run("discordConnectionIDsCache_Updated", connectionIDs)
-  return connectionIDs
-end
 connectionIDs = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
 
-
-function writeConnectionIDs(connectionIDs)
-  file.Write( FILEPATH..'.json', util.TableToJSON(connectionIDs))
-  hook.Run("discordConnectionIDsCache_Updated", connectionIDs)
-end
-
-function addConnectionID(ply, id)
-  connectionIDs[ply:SteamID()] = id
-  writeConnectionIDs(connectionIDs)
-  end
-
-function removeConnectionID(ply)
-  connectionIDs[ply:SteamID()] = nil
-  writeConnectionIDs(connectionIDs)
-end
-
-function httpFetch(req, params, cb, tries)
-  httpAdress = GetConVar("discordbot_endpoint"):GetString()
-  http.Fetch(httpAdress..'/'..req,
-    function(res)
-      --print(res)
-      cb(util.JSONToTable(res))
-    end,
-    function(err)
-      print_message("Request to bot failed. Is the bot running?")
-      print_message("Err: "..err)
-      if (!tries) then tries = TRIES end
-      if (tries != 0) then httpFetch(req, params, cb, tries-1) end
-    end, {req=req, params=util.TableToJSON(params)}
-  )
-end
 
 function sendClientIconInfo(ply, mute)
   net.Start("drawMute")
