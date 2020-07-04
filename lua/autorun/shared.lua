@@ -1,4 +1,5 @@
-include('utils.lua')
+include('utils/connectionTable.lua')
+include('utils/http.lua')
 
 resource.AddFile("materials/icon128/mute.png")
 if (CLIENT) then
