@@ -1,4 +1,4 @@
-print('[Discord] '..'Loading: '..'utils/messaging.lua')
+print('[Discord] Loading: utils/messaging.lua')
 
 function playerMessage(message, ply)
   if (!ply) then

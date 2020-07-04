@@ -1,4 +1,4 @@
-print('[Discord] '..'Loading: '..'utils/logging.lua')
+print('[Discord] Loading: utils/logging.lua')
 
 local enableDebugLogging = true;
 

@@ -1,6 +1,6 @@
 AddCSLuaFile()
 print('')
-print('[Discord] ' .. 'Loading: ' .. 'autorun/shared.lua')
+print('[Discord] Loading: autorun/shared.lua')
 print('[Discord] Init')
 
 resource.AddFile("materials/icon256/mute.png")
@@ -58,16 +58,16 @@ function mute(ply, duration)
           --PrintTable(res)
           if (res.success) then
             if (duration) then
-              player_message("You're muted in discord for "..duration.." seconds.", ply)
+              playerMessage("You're muted in discord for " .. duration .. " seconds.", ply)
               timer.Simple(duration, function() unmute(ply) end)
             else
-              player_message("You're muted in discord until the round ends.", ply)
+              playerMessage("You're muted in discord until the round ends.", ply)
             end
             sendClientIconInfo(ply, true)
             muted[ply] = true
           end
           if (res.error) then
-            player_message("Error: "..res.err)
+            playerMessage("Error: " .. res.err)
           end
         end
       end)
@@ -82,13 +82,13 @@ function unmute(ply)
         httpFetch("mute", {mute=false, id=connectionIDs[ply:SteamID()]}, function(res)
           if (res.success) then
             if (ply) then
-              player_message("You're no longer muted in discord!", ply)
+              playerMessage("You're no longer muted in discord!", ply)
             end
             sendClientIconInfo(ply, false)
             muted[ply] = false
           end
           if (res.error) then
-            print("Error: "..res.err)
+            print("Error: " .. res.err)
           end
         end)
       end
@@ -117,8 +117,8 @@ function commonRoundState()
 end
 
 function joinMessage(ply)
-  player_message("Join the discord server - " .. GetConVar("discordbot_server_link"):GetString(), ply)
-  player_message("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
+  playerMessage("Join the discord server - " .. GetConVar("discordbot_server_link"):GetString(), ply)
+  playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
 -- function connectPlayer(ply, discordName, success, error)
@@ -129,8 +129,8 @@ end
 --     tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
 --   end
 --   httpFetch("connect", {tag=tag_utf8}, function(res)
---     if (res.answer == 0) then player_message("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
---     if (res.answer == 1) then player_message("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
+--     if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
+--     if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
 --     if (res.tag and res.id) then
 --       addConnectionID(ply, res.id)
 --       success()
@@ -149,10 +149,10 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
     tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
   end
   httpFetch("connect", {tag=tag_utf8}, function(res)
-    if (res.answer == 0) then player_message("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
-    if (res.answer == 1) then player_message("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
+    if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
+    if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
     if (res.tag and res.id) then
-      player_message("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. ply:SteamID() .. "'", ply) --lie! actually the discord id is bound! ;)
+      playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. ply:SteamID() .. "'", ply) --lie! actually the discord id is bound! ;)
       connectionIDs[ply:SteamID()] = res.id
       writeConnectionIDs(connectionIDs)
     end
@@ -162,7 +162,7 @@ end)
 
 hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
   if (connectionIDs[ply:SteamID()]) then
-    player_message("You are connected with discord.", ply)
+    playerMessage("You are connected with discord.", ply)
   else
     if (GetConVar("discordbot_auto_connect"):GetBool()) then
 
@@ -173,9 +173,9 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
         tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
       end
       httpFetch("connect", {tag=tag_utf8}, function(res)
-     	 -- player_message("Attempting to match your name, "..tag)
+     	 -- playerMessage("Attempting to match your name, " .. tag)
         if (res.tag and res.id) then
-          player_message("Discord tag '" .. res.tag .. "' successfully bound to SteamID '" .. ply:SteamID() .. "'", ply)
+          playerMessage("Discord tag '" .. res.tag .. "' successfully bound to SteamID '" .. ply:SteamID() .. "'", ply)
           addConnectionID(ply, res.id)
         else
           joinMessage(ply)

@@ -1,4 +1,4 @@
-print('[Discord] '..'Loading: '..'utils/discord_connection.lua')
+print('[Discord] Loading: utils/discord_connection.lua')
 include('./logging.lua')
 
 local connectionsTable = {}
