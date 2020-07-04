@@ -1,12 +1,6 @@
-local enableDebugLogging = false;
+print('[Discord] '..'Loading: '..'utils/messaging.lua')
 
-function print_debug_log(msg)
-  if (enableDebugLogging) then
-    print(msg)
-  end
-end
-
-function print_message(message, ply)
+function playerMessage(message, ply)
   if (!ply) then
     PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
   else

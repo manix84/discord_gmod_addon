@@ -1,4 +1,5 @@
-AddCSLuaFile('./messageLogging.lua')
+print('[Discord] '..'Loading: '..'utils/discord_connection.lua')
+include('./logging.lua')
 
 local connectionsTable = {}
 
@@ -9,18 +10,18 @@ function backupConnectionIDs(connectionsTable)
   local TimeString = os.date( "%Y%m%d%H" , Timestamp )
   local backupFileName = FILEPATH..'_BACKUP_'..TimeString
   file.Write( backupFileName..'.json', util.TableToJSON(connectionsTable))
-  print_debug_log("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
+  print_debug("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
 end
 
 
 function getConnectionIDs()
   local rawConnectionIDsFromCache = file.Read( FILEPATH..'.json', 'DATA' )
-  print_debug_log('Attempting to collect from ConnectionID cache from '..FILEPATH..'.json')
+  print_debug('Attempting to collect from ConnectionID cache from '..FILEPATH..'.json')
   if (rawConnectionIDsFromCache) then
     connectionsTable = util.JSONToTable(rawConnectionIDsFromCache)
-    print_debug_log('ConnectionID cache collected: '..rawConnectionIDsFromCache)
+    print_debug('ConnectionID cache collected: '..rawConnectionIDsFromCache)
   else
-    print_debug_log('ConnectionID cache failure: ', rawConnectionIDsFromCache)
+    print_debug('ConnectionID cache failure: ', rawConnectionIDsFromCache)
   end
   return connectionsTable
 end
@@ -30,9 +31,9 @@ function writeConnectionIDs(connectionsTable)
 
   local writtenConnectionsTable = file.Read( FILEPATH..'.json', 'DATA' )
   if (writtenConnectionsTable == util.TableToJSON(connectionsTable)) then
-    print_debug_log("Cache written.")
+    print_debug("Cache written.")
   else
-    print_debug_log("Cache write failed.")
+    print_debug("Cache write failed.")
   end
 end
 

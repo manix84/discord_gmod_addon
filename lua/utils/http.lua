@@ -1,3 +1,4 @@
+print('[Discord] '..'Loading: '..'utils/http.lua')
 function httpFetch(req, params, callback, tries)
   local defaultTries = 3
   httpAdress = GetConVar("discordbot_endpoint"):GetString()
