@@ -134,6 +134,7 @@ end
 -- end
 
 hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
+  if (string.sub(msg,1,9) != '!discord ') then return end
   tag = string.sub(msg,10)
   tag_utf8 = ""
 
@@ -149,6 +150,7 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
       writeConnectionIDs(connectionIDs)
     end
   end)
+  return ""
 end)
 
 hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
