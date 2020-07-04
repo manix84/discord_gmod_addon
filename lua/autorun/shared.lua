@@ -10,7 +10,7 @@ if (CLIENT) then
     drawMute = net.ReadBool()
   end)
 
-  hook.Add( "HUDPaint", "discord_bot_commands_HUDPaint", function()
+  hook.Add( "HUDPaint", "discord_HUDPaint", function()
     if (!drawMute) then return end
     surface.SetDrawColor(176, 40, 40, 255)
     surface.SetMaterial(muteIcon)
@@ -21,7 +21,7 @@ end
 
 util.AddNetworkString("drawMute")
 CreateConVar("discordbot_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
-CreateConVar("discordbot_name", "GMod Discord Bot", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
+CreateConVar("discordbot_name", "Discord", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
 CreateConVar("discordbot_server_link", "https://discord.gg/", 1, "Sets the Discord server your bot is present on (eg: https://discord.gg/aBc123).")
 CreateConVar("discordbot_mute_round", 1, 1, "Mute the player until the end of the round.", 0, 1)
 CreateConVar("discordbot_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
@@ -133,14 +133,7 @@ end
 --   end)
 -- end
 
-hook.Add("PlayerSay", "discord_bot_commands_PlayerSay", function(ply, msg)
-  if (string.sub(msg,1,9) != '!discord ') then
-    if (string.sub(msg,1,8) == '!discord') then
-      joinMessage(ply)
-    end
-    return ""
-  end
-  
+hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
   tag = string.sub(msg,10)
   tag_utf8 = ""
 
@@ -158,7 +151,7 @@ hook.Add("PlayerSay", "discord_bot_commands_PlayerSay", function(ply, msg)
   end)
 end)
 
-hook.Add("PlayerInitialSpawn", "discord_bot_commands_PlayerInitialSpawn", function(ply)
+hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
   if (connectionIDs[ply:SteamID()]) then
     print_message("You are connected with discord.", ply)
   else
@@ -185,51 +178,51 @@ hook.Add("PlayerInitialSpawn", "discord_bot_commands_PlayerInitialSpawn", functi
   end
 end)
 
-hook.Add("ConnectPlayer", "discord_bot_commands_ConnectPlayer", function(ply, discordID)
+hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(ply, discordID)
   addConnectionID(ply, discordID)
 end)
 
-hook.Add("ConnectPlayer_Name", "discord_bot_commands_ConnectPlayer_ByName", function(ply, discordName)
+hook.Add("ConnectPlayer_Name", "discord_ConnectPlayer_ByName", function(ply, discordName)
 
 end)
 
-hook.Add("DisconnectPlayer", "discord_bot_commands_DisconnectPlayer", function(ply)
+hook.Add("DisconnectPlayer", "discord_DisconnectPlayer", function(ply)
   removeConnectionID(ply)
 end)
 
-hook.Add("MutePlayer", "discord_bot_commands_MutePlayer", function(ply, duration)
+hook.Add("MutePlayer", "discord_MutePlayer", function(ply, duration)
   if (duration > 0) then
     mute(ply, duration)
   else
     mute(ply)
   end
 end)
-hook.Add("UnmutePlayer", "discord_bot_commands_UnmutePlayer", function(ply)
+hook.Add("UnmutePlayer", "discord_UnmutePlayer", function(ply)
   unmute(ply)
 end)
 
-hook.Add("PlayerSpawn", "discord_bot_commands_PlayerSpawn", function(ply)
+hook.Add("PlayerSpawn", "discord_PlayerSpawn", function(ply)
   unmute(ply)
 end)
-hook.Add("PlayerDisconnected", "discord_bot_commands_PlayerDisconnected", function(ply)
+hook.Add("PlayerDisconnected", "discord_PlayerDisconnected", function(ply)
   unmute(ply)
 end)
-hook.Add("ShutDown", "discord_bot_commands_ShutDown", function()
+hook.Add("ShutDown", "discord_ShutDown", function()
   unmute()
 end)
-hook.Add("TTTEndRound", "discord_bot_commands_TTTEndRound", function()
+hook.Add("TTTEndRound", "discord_TTTEndRound", function()
   timer.Simple(0.1, function() unmute() end)
 end)
-hook.Add("TTTBeginRound", "discord_bot_commands_TTTBeginRound", function()--in case of round-restart via command
+hook.Add("TTTBeginRound", "discord_TTTBeginRound", function()--in case of round-restart via command
   unmute()
 end)
-hook.Add("OnEndRound", "discord_bot_commands_OnEndRound", function()
+hook.Add("OnEndRound", "discord_OnEndRound", function()
   timer.Simple(0.1, function() unmute() end)
 end)
-hook.Add("OnStartRound", "discord_bot_commands_OnStartRound", function()
+hook.Add("OnStartRound", "discord_OnStartRound", function()
   unmute()
 end)
-hook.Add("PostPlayerDeath", "discord_bot_commands_PostPlayerDeath", function(ply)
+hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(ply)
   if (commonRoundState() == 1) then
     if (GetConVar("discordbot_mute_round"):GetBool()) then
       mute(ply)
