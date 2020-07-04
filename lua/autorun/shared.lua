@@ -121,25 +121,6 @@ function joinMessage(ply)
   playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
--- function connectPlayer(ply, discordName, success, error)
---   tag = discordName
---   tag_utf8 = ""
-
---   for p, c in utf8.codes(tag) do
---     tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
---   end
---   httpFetch("connect", {tag=tag_utf8}, function(res)
---     if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
---     if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
---     if (res.tag and res.id) then
---       addConnectionID(ply, res.id)
---       success()
---     else
---       error(res)
---     end
---   end)
--- end
-
 hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
   if (string.sub(msg,1,9) != '!discord ') then return end
   tag = string.sub(msg,10)
@@ -189,10 +170,6 @@ end)
 
 hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(ply, discordID)
   addConnectionID(ply, discordID)
-end)
-
-hook.Add("ConnectPlayer_Name", "discord_ConnectPlayer_ByName", function(ply, discordName)
-
 end)
 
 hook.Add("DisconnectPlayer", "discord_DisconnectPlayer", function(ply)
