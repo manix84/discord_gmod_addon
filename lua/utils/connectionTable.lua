@@ -2,14 +2,6 @@ local connectionsTable = {}
 
 local FILEPATH = "discord_connection_cache"
 
-function print_message(message, ply)
-  if (!ply) then
-    PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
-  else
-    ply:PrintMessage(HUD_PRINTTALK, "["..GetConVar("discordbot_name"):GetString().."] "..message)
-  end
-end
-
 function backupConnectionIDs(connectionsTable)
   local Timestamp = os.time()
   local TimeString = os.date( "%Y%m%d%H" , Timestamp )

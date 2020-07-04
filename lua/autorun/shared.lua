@@ -1,3 +1,4 @@
+AddCSLuaFile('../utils/messageLogging.lua')
 AddCSLuaFile('../utils/connectionTable.lua')
 AddCSLuaFile('../utils/http.lua')
 
