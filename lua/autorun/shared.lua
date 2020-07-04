@@ -1,10 +1,10 @@
 include('utils/connectionTable.lua')
 include('utils/http.lua')
 
-resource.AddFile("materials/icon128/mute.png")
+resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
   drawMute = false
-  muteIcon = Material("materials/icon128/mute.png")
+  muteIcon = Material("materials/icon256/mute.png")
 
   net.Receive("drawMute", function()
     drawMute = net.ReadBool()
@@ -14,7 +14,7 @@ if (CLIENT) then
     if (!drawMute) then return end
     surface.SetDrawColor(176, 40, 40, 255)
     surface.SetMaterial(muteIcon)
-    surface.DrawTexturedRect(192, 64, 128, 128)
+    surface.DrawTexturedRect(32, 32, 256, 256)
   end )
   return
 end
@@ -114,6 +114,25 @@ function joinMessage(ply)
   print_message("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
+-- function connectPlayer(ply, discordName, success, error)
+--   tag = discordName
+--   tag_utf8 = ""
+
+--   for p, c in utf8.codes(tag) do
+--     tag_utf8 = string.Trim(tag_utf8.." "..c)
+--   end
+--   httpFetch("connect", {tag=tag_utf8}, function(res)
+--     if (res.answer == 0) then print_message("No guilde member with a discord tag like '"..tag.."' found.", ply) end
+--     if (res.answer == 1) then print_message("Found more than one user with a discord tag like '"..tag.."'. Try your full tag, EG: Manix84#1234", ply) end
+--     if (res.tag and res.id) then
+--       addConnectionID(ply, res.id)
+--       success()
+--     else
+--       error(res)
+--     end
+--   end)
+-- end
+
 hook.Add("PlayerSay", "discord_bot_commands_PlayerSay", function(ply, msg)
   if (string.sub(msg,1,9) != '!discord ') then
     if (string.sub(msg,1,8) == '!discord') then
@@ -137,7 +156,6 @@ hook.Add("PlayerSay", "discord_bot_commands_PlayerSay", function(ply, msg)
       writeConnectionIDs(connectionIDs)
     end
   end)
-  return ""
 end)
 
 hook.Add("PlayerInitialSpawn", "discord_bot_commands_PlayerInitialSpawn", function(ply)
