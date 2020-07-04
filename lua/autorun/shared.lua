@@ -212,12 +212,6 @@ end)
 hook.Add("ShutDown", "discord_ShutDown", function()
   unmute()
 end)
-hook.Add("TTTEndRound", "discord_TTTEndRound", function()
-  timer.Simple(0.1, function() unmute() end)
-end)
-hook.Add("TTTBeginRound", "discord_TTTBeginRound", function()--in case of round-restart via command
-  unmute()
-end)
 hook.Add("OnEndRound", "discord_OnEndRound", function()
   timer.Simple(0.1, function() unmute() end)
 end)
@@ -233,4 +227,12 @@ hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(ply)
       mute(ply, duration)
     end
   end
+end)
+
+-- TTT Specific
+hook.Add("TTTEndRound", "discord_TTTEndRound", function()
+  timer.Simple(0.1, function() unmute() end)
+end)
+hook.Add("TTTBeginRound", "discord_TTTBeginRound", function()
+  unmute()
 end)
