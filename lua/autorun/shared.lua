@@ -1,5 +1,5 @@
-include('utils/connectionTable.lua')
-include('utils/http.lua')
+AddCSLuaFile('../utils/connectionTable.lua')
+AddCSLuaFile('../utils/http.lua')
 
 resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
