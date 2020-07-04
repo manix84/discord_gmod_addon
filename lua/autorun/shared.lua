@@ -82,7 +82,7 @@ function unmute(ply)
             muted[ply] = false
           end
           if (res.error) then
-            print("Error: "..res.err)
+            print_debug_log("Error: " .. res.err)
           end
         end)
       end
