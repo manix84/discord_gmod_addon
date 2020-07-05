@@ -13,7 +13,9 @@ if (CLIENT) then
   end)
 
   hook.Add( "HUDPaint", "discord_HUDPaint", function()
-    if (!shouldDrawMute) then return end
+    if (!shouldDrawMute) then
+      return
+    end
     surface.SetDrawColor(176, 40, 40, 255)
     surface.SetMaterial(muteIconAsset)
     surface.DrawTexturedRect(32, 32, 256, 256)
@@ -98,9 +100,11 @@ function unmutePlayer(target_ply)
     end
   else
     for target_ply,val in pairs(mutedPlayerTable) do
-      if val then unmutePlayer(target_ply) end
+      if val then
+        unmutePlayer(target_ply)
     end
   end
+end
 end
 
 function commonRoundState()
@@ -124,9 +128,10 @@ function joinMessage(target_ply)
   playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", target_ply)
 end
 
-
 net.Receive("connectDiscordID", function( len, calling_ply )
-  if !calling_ply:IsSuperAdmin() then return end
+  if !calling_ply:IsSuperAdmin() then
+    return
+  end
 
   local target_ply = net.ReadEntity()
   local discordID = net.ReadString()
@@ -134,7 +139,9 @@ net.Receive("connectDiscordID", function( len, calling_ply )
 end)
 
 net.Receive("request_discordPlayerTable", function( len, calling_ply )
-  if !calling_ply:IsSuperAdmin() then return end
+  if !calling_ply:IsSuperAdmin() then
+    return
+  end
 
   local connectionsJSON = util.TableToJSON(steamIDToDiscordIDConnectionTable)
   local compressedConnections = util.Compress(connectionsJSON)
@@ -146,7 +153,9 @@ net.Receive("request_discordPlayerTable", function( len, calling_ply )
 end)
 
 hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
-  if (string.sub(msg,1,9) != '!discord ') then return end
+  if (string.sub(msg,1,9) != '!discord ') then
+    return
+  end
   tag = string.sub(msg,10)
   tag_utf8 = ""
 
@@ -154,8 +163,12 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
     tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
   end
   httpFetch("connect", {tag=tag_utf8}, function(res)
-    if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", target_ply) end
-    if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply) end
+    if (res.answer == 0) then
+      playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", target_ply)
+    end
+    if (res.answer == 1) then
+      playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply)
+    end
     if (res.tag and res.id) then
       playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. target_ply:SteamID() .. "'", target_ply) --lie! actually the discord id is bound! ;)
       steamIDToDiscordIDConnectionTable[target_ply:SteamID()] = res.id
@@ -170,7 +183,6 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(target_ply
     playerMessage("You are connected with discord.", target_ply)
   else
     if (GetConVar("discord_auto_connect"):GetBool()) then
-
       tag = target_ply:Name()
       tag_utf8 = ""
 
@@ -221,7 +233,9 @@ hook.Add("ShutDown", "discord_ShutDown", function()
   unmutePlayer()
 end)
 hook.Add("OnEndRound", "discord_OnEndRound", function()
-  timer.Simple(0.1, function() unmutePlayer() end)
+  timer.Simple(0.1, function()
+    unmutePlayer()
+  end)
 end)
 hook.Add("OnStartRound", "discord_OnStartRound", function()
   unmutePlayer()
@@ -239,7 +253,9 @@ end)
 
 -- TTT Specific
 hook.Add("TTTEndRound", "discord_TTTEndRound", function()
-  timer.Simple(0.1, function() unmutePlayer() end)
+  timer.Simple(0.1, function()
+    unmutePlayer()
+  end)
 end)
 hook.Add("TTTBeginRound", "discord_TTTBeginRound", function()
   unmutePlayer()
