@@ -43,7 +43,6 @@ CreateConVar("discord_auto_connect", 0, 1, "Attempt to automatically match playe
 
 local mutedPlayerTable = {}
 local steamIDToDiscordIDConnectionTable = getConnectionIDs()
-backupConnectionIDs(connectionIDs)
 
 function drawMuteIcon(target_ply, shouldDrawMute)
   net.Start("drawMute")
