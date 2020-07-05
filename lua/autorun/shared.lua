@@ -59,10 +59,10 @@ function mutePlayer(target_ply, duration)
           --PrintTable(res)
           if (res.success) then
             if (duration) then
-              playerMessage("You're muted in discord for " .. duration .. " seconds.", target_ply)
+              playerMessage("You're muted for " .. duration .. " seconds.", target_ply)
               timer.Simple(duration, function() unmutePlayer(target_ply) end)
             else
-              playerMessage("You're muted in discord until the round ends.", target_ply)
+              playerMessage("You're muted until the round ends.", target_ply)
             end
             drawMuteIcon(target_ply, true)
             mutedPlayerTable[target_ply] = true
@@ -83,7 +83,7 @@ function unmutePlayer(target_ply)
         httpFetch("mute", {mute=false, id=steamIDToDiscordIDConnectionTable[target_ply:SteamID()]}, function(res)
           if (res.success) then
             if (target_ply) then
-              playerMessage("You're no longer muted in discord!", target_ply)
+              playerMessage("You're no longer muted.", target_ply)
             end
             drawMuteIcon(target_ply, false)
             mutedPlayerTable[target_ply] = false
@@ -160,10 +160,10 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
   end
   httpFetch("connect", {tag=tag_utf8}, function(res)
     if (res.answer == 0) then
-      playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", target_ply)
+      playerMessage("No server member with a name like '" .. tag .. "' found.", target_ply)
     end
     if (res.answer == 1) then
-      playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply)
+      playerMessage("Found more than one user with a name like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply)
     end
     if (res.tag and res.id) then
       playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. target_ply:SteamID() .. "'", target_ply) --lie! actually the discord id is bound! ;)
