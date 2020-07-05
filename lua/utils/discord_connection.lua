@@ -9,7 +9,7 @@ function backupConnectionIDs(connectionsTable)
   local Timestamp = os.time()
   local TimeString = os.date( "%Y%m%d%H" , Timestamp )
   local backupFileName = FILEPATH..'_BACKUP_'..TimeString
-  file.Write( backupFileName..'.json', util.TableToJSON(connectionsTable))
+  file.Write( backupFileName..'.json', util.TableToJSON(connectionsTable, true))
   print_debug("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
 end
 
@@ -27,7 +27,7 @@ function getConnectionIDs()
 end
 
 function writeConnectionIDs(connectionsTable)
-  file.Write( FILEPATH..'.json', util.TableToJSON(connectionsTable) )
+  file.Write( FILEPATH..'.json', util.TableToJSON(connectionsTable, true) )
 
   local writtenConnectionsTable = file.Read( FILEPATH..'.json', 'DATA' )
   if (writtenConnectionsTable == util.TableToJSON(connectionsTable)) then
