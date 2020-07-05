@@ -5,17 +5,17 @@ print('[Discord] Init')
 
 resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
-  drawMute = false
-  muteIcon = Material("materials/icon256/mute.png")
+  shouldDrawMute = false
+  muteIconAsset = Material("materials/icon256/mute.png")
 
   net.Receive("drawMute", function()
-    drawMute = net.ReadBool()
+    shouldDrawMute = net.ReadBool()
   end)
 
   hook.Add( "HUDPaint", "discord_HUDPaint", function()
-    if (!drawMute) then return end
+    if (!shouldDrawMute) then return end
     surface.SetDrawColor(176, 40, 40, 255)
-    surface.SetMaterial(muteIcon)
+    surface.SetMaterial(muteIconAsset)
     surface.DrawTexturedRect(32, 32, 256, 256)
   end )
   return
@@ -44,9 +44,9 @@ muted = {}
 connectionIDs = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
 
-function sendClientIconInfo(target_ply, mute)
+function drawMuteIcon(target_ply, shouldDrawMute)
   net.Start("drawMute")
-  net.WriteBool(mute)
+  net.WriteBool(shouldDrawMute)
   net.Send(target_ply)
 end
 
@@ -67,7 +67,7 @@ function mute(target_ply, duration)
             else
               playerMessage("You're muted in discord until the round ends.", target_ply)
             end
-            sendClientIconInfo(target_ply, true)
+            drawMuteIcon(target_ply, true)
             muted[target_ply] = true
           end
           if (res.error) then
@@ -88,7 +88,7 @@ function unmute(target_ply)
             if (target_ply) then
               playerMessage("You're no longer muted in discord!", target_ply)
             end
-            sendClientIconInfo(target_ply, false)
+            drawMuteIcon(target_ply, false)
             muted[target_ply] = false
           end
           if (res.error) then
