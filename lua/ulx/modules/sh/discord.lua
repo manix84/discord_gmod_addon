@@ -16,7 +16,7 @@ end
 
 local mute = ulx.command(CATEGORY_NAME, "ulx mute", ulx.mute, "!mute")
 mute:addParam{ type=ULib.cmds.PlayersArg }
-mute:addParam{ type=ULib.cmds.NumArg, min=0, max=60, default=0, hint="duration, 0 is round end", ULib.cmds.optional, ULib.cmds.round }
+mute:addParam{ type=ULib.cmds.NumArg, min=0, max=60, default=5, hint="duration, 0 is round end", ULib.cmds.optional, ULib.cmds.round }
 mute:addParam{ type=ULib.cmds.BoolArg, invisible=true }
 mute:setOpposite( "ulx unmute", {_, _, _, true}, "!unmute" )
 
