@@ -2,7 +2,7 @@
 {
 	"title"		:	"Discord Muter",
 	"type"		:	"ServerContent",
-    "tags"		:	[ "roleplay", "realism" ],
+    "tags"		:	[ "fun", "realism" ],
     "ignore"	: [
         "*.psd",
         "*.vcproj",
