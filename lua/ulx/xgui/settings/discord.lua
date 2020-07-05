@@ -125,3 +125,97 @@ discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, la
 xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
 xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
 
+
+-------------------------Players Module-----------------------
+local discord_playerConnections_panel = xlib.makelistlayout{ w=415, h=318, parent=discord.panel }
+
+local connectionIDs = {}
+
+--Player Connection
+local discord_playerConnections_table_Category = vgui.Create( "DCollapsibleCategory", discord_playerConnections_panel ) 
+discord_playerConnections_table_Category:SetSize( 393, 45 )
+discord_playerConnections_table_Category:SetExpanded( true )
+discord_playerConnections_table_Category:SetLabel( "Player Connections" )
+
+local discord_playerConnections_table_List = vgui.Create( "DPanelList", discord_playerConnections_table_Category )
+discord_playerConnections_table_List:SetPos( 10, 25 )
+discord_playerConnections_table_List:SetSize( 393, 290 )
+discord_playerConnections_table_List:EnableVerticalScrollbar( false )
+discord_playerConnections_table_List:SetSpacing( 5 )
+
+discord_playerConnections_table_List.listview = xlib.makelistview{ x=0, y=5, w=393, h=200, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.listview:AddColumn( "Name" )
+-- discord_playerConnections_table_List.listview.Columns[1]:set
+discord_playerConnections_table_List.listview:AddColumn( "Role" )
+discord_playerConnections_table_List.listview:AddColumn( "DiscordID" )
+
+
+discord_playerConnections_table_List.AddItem(xlib.makelabel{ x=0, y=210, w=140, h=20, label="Player DiscordID", parent=discord_playerConnections_table_List })
+local discord_playerConnections_DiscordID_textBox = xlib.maketextbox{ x=150, y=210, w=200, h=20, label="", disabled=true, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_textBox)
+
+local discord_playerConnections_table_List__Selected_SteamID = nil
+
+local discord_playerConnections_DiscordID_saveButton = xlib.makebutton{x=355, y=210, w=38, label="Save", disabled=true, parent=discord_playerConnections_table_List}
+
+local saveDiscordSteamConnection = function()
+  local target_ply = player.GetBySteamID(discord_playerConnections_table_List__Selected_SteamID);
+  local discord_id = discord_playerConnections_DiscordID_textBox:GetText();
+
+  net.Start("connectDiscordID")
+  net.WriteEntity(target_ply)
+  net.WriteString(discord_id)
+  net.SendToServer()
+  discord_playerConnections_DiscordID_textBox:SetText('')
+  discord_playerConnections_DiscordID_textBox:SetDisabled( true )
+  discord_playerConnections_DiscordID_saveButton:SetDisabled( true )
+  discord_playerConnections_table_List__Refresh()
+end
+discord_playerConnections_DiscordID_saveButton.DoClick = saveDiscordSteamConnection
+discord_playerConnections_DiscordID_textBox.OnEnter = saveDiscordSteamConnection
+discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_saveButton)
+
+local discord_playerConnections_refreshButton = xlib.makebutton{x=0, y=265, w=75, label="Refresh List", parent=discord_playerConnections_table_List}
+discord_playerConnections_refreshButton.DoClick = function()
+  discord_playerConnections_table_List__Refresh()
+  discord_playerConnections_table_List__Selected_SteamID = nil
+  discord_playerConnections_DiscordID_textBox:SetDisabled( true )
+  discord_playerConnections_DiscordID_saveButton:SetDisabled( true )
+  discord_playerConnections_DiscordID_textBox:SetText('')
+end
+discord_playerConnections_table_List.AddItem(discord_playerConnections_refreshButton)
+discord_playerConnections_table_List.listview.OnRowSelected = function( self, LineID, Line )
+  discord_playerConnections_table_List__Selected_SteamID = Line:GetValue( 4 )
+  discord_playerConnections_DiscordID_textBox:SetDisabled( false )
+  discord_playerConnections_DiscordID_saveButton:SetDisabled( false )
+  discord_playerConnections_DiscordID_textBox:SetText(
+    connectionIDs[discord_playerConnections_table_List__Selected_SteamID] or ''
+  )
+end
+
+net.Receive("discordPlayerTable", function()
+  local len = net.ReadUInt(32)
+  local compressedConnections = net.ReadData(len)
+  local connectionsJSON = util.Decompress(compressedConnections)
+
+  connectionIDs = util.JSONToTable(connectionsJSON)
+
+  discord_playerConnections_table_List.listview:Clear()
+  for index, ply in pairs(player.GetAll()) do
+    discord_playerConnections_table_List.listview:AddLine(
+      ply:GetName(),
+      ply:GetUserGroup(),
+      connectionIDs[ply:SteamID()],
+      ply:SteamID() // Hidden SteamID column
+    )
+  end
+end)
+function discord_playerConnections_table_List__Refresh()
+  net.Start("request_discordPlayerTable")
+  net.SendToServer()
+end
+discord_playerConnections_table_List__Refresh()
+
+xgui.hookEvent( "onProcessModules", nil, discord_playerConnections_panel.processModules )
+xgui.addSubModule( "Player Connections", discord_playerConnections_panel, nil, "discord" )
+
