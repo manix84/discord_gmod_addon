@@ -44,7 +44,7 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 4. You're all setup, so now, connect your Steam and Discord accounts:
   - Connect your Steam Account with the bot by typing `!discord YourDiscordTag` in the ingame chat (E.G `!discord Manix84`).
     - If you're having trouble, try your full discord name (E.G: `!discord Manix84#8429`). This should only be necessary if there are two or more people with the same name.
-  - So long as you're in correct **DISCORD_GUILDD** and **DISCORD_CHANNEL**, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
+  - So long as you're in correct **DISCORD_GUILD** and **DISCORD_CHANNEL**, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
 
 ## Credits
 
