@@ -7,7 +7,7 @@ local FILEPATH = "discord_connection_cache"
 
 function backupConnectionIDs(connectionsTable)
   local Timestamp = os.time()
-  local TimeString = os.date( "%Y%m%d%H" , Timestamp )
+  local TimeString = os.date("%Y%m%d" , Timestamp)
   local backupFileName = FILEPATH..'_BACKUP_'..TimeString
   file.Write( backupFileName..'.json', util.TableToJSON(connectionsTable, true))
   print_debug("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
