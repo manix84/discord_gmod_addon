@@ -12,6 +12,9 @@ function httpFetch(req, params, callback, tries)
       print("Err: "..err)
       if (!tries) then tries = defaultTries end
       if (tries != 0) then httpFetch(req, params, callback, tries-1) end
-    end, {req=req, params=util.TableToJSON(params)}
+    end, {
+      ["req"] = req,
+      ["params"] = util.TableToJSON(params)
+    }
   )
 end
