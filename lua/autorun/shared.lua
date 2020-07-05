@@ -39,7 +39,7 @@ CreateConVar("discord_mute_round", 1, 1, "Mute the player until the end of the r
 CreateConVar("discord_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
 CreateConVar("discord_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
-muted = {}
+mutedPlayerTable = {}
 
 connectionIDs = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
@@ -51,7 +51,7 @@ function drawMuteIcon(target_ply, shouldDrawMute)
 end
 
 function isMuted(target_ply)
-  return muted[target_ply]
+  return mutedPlayerTable[target_ply]
 end
 
 function mute(target_ply, duration)
@@ -68,7 +68,7 @@ function mute(target_ply, duration)
               playerMessage("You're muted in discord until the round ends.", target_ply)
             end
             drawMuteIcon(target_ply, true)
-            muted[target_ply] = true
+            mutedPlayerTable[target_ply] = true
           end
           if (res.error) then
             playerMessage("Error: " .. res.err)
@@ -89,7 +89,7 @@ function unmute(target_ply)
               playerMessage("You're no longer muted in discord!", target_ply)
             end
             drawMuteIcon(target_ply, false)
-            muted[target_ply] = false
+            mutedPlayerTable[target_ply] = false
           end
           if (res.error) then
             print("Error: " .. res.err)
@@ -98,7 +98,7 @@ function unmute(target_ply)
       end
     end
   else
-    for target_ply,val in pairs(muted) do
+    for target_ply,val in pairs(mutedPlayerTable) do
       if val then unmute(target_ply) end
     end
   end
