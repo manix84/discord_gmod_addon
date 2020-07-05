@@ -1,4 +1,3 @@
-print('[Discord] Loading: utils/http.lua')
 function httpFetch(req, params, callback, tries)
   local defaultTries = 3
   httpsAdress = GetConVar("discord_endpoint"):GetString()

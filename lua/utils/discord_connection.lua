@@ -1,4 +1,3 @@
-print('[Discord] Loading: utils/discord_connection.lua')
 include('./logging.lua')
 
 local connectionsTable = {}
@@ -12,7 +11,6 @@ function backupConnectionIDs(connectionsTable)
   file.Write( backupFileName..'.json', util.TableToJSON(connectionsTable, true))
   print_debug("Discord Connection IDs Backed Up to: "..backupFileName..'.json')
 end
-
 
 function getConnectionIDs()
   local rawConnectionIDsFromCache = file.Read( FILEPATH..'.json', 'DATA' )

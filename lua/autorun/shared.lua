@@ -1,7 +1,4 @@
 AddCSLuaFile()
-print('')
-print('[Discord] Loading: autorun/shared.lua')
-print('[Discord] Init')
 
 resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
