@@ -73,10 +73,10 @@ discord_settings_mute_options_List:SetSize( 393, 45 )
 discord_settings_mute_options_List:EnableVerticalScrollbar( false )
 discord_settings_mute_options_List:SetSpacing( 5 )
 
-local mute_round = xlib.makecheckbox{ x=0, y=0, label="Mute Until Round End", repconvar="rep_discordbot_mute_round", parent=discord_settings_mute_options_List }
+local mute_round = xlib.makecheckbox{ x=0, y=0, label="Mute Until Round End", repconvar="rep_discord_mute_round", parent=discord_settings_mute_options_List }
 discord_settings_mute_options_List.AddItem(mute_round)
 
-local mute_duration = xlib.makeslider{ x=0, y=20, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discordbot_mute_duration", parent=discord_settings_mute_options_List }
+local mute_duration = xlib.makeslider{ x=0, y=20, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discord_mute_duration", parent=discord_settings_mute_options_List }
 function mute_round.OnChange()
   mute_duration:SetDisabled( mute_round:GetChecked() )
 end
@@ -97,12 +97,12 @@ discord_settings_config_List:EnableVerticalScrollbar( false )
 discord_settings_config_List:SetSpacing( 5 )
 
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Message Prefix", parent=discord_settings_config_List })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Message Prefix", repconvar="rep_discordbot_name", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Message Prefix", repconvar="rep_discord_name", parent=discord_settings_config_List })
 
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discordbot_server_link", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discord_server_link", parent=discord_settings_config_List })
 
-discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=55, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discordbot_auto_connect", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=55, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discord_auto_connect", parent=discord_settings_config_List })
 
 --Bot Connection
 local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
@@ -112,12 +112,12 @@ discord_botConnection_Category:SetLabel( "Bot Connection (Don't Open On Stream!)
 
 local discord_botConnection_List = vgui.Create( "DPanelList", discord_botConnection_Category )
 discord_botConnection_List:SetPos( 10, 25 )
-discord_botConnection_List:SetSize( 393, 25 )
+discord_botConnection_List:SetSize( 393, 50 )
 discord_botConnection_List:EnableVerticalScrollbar( false )
 discord_botConnection_List:SetSpacing( 5 )
 
 discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Node Bot Endpoint", parent=discord_botConnection_List })
-discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Node Bot Endpoint", repconvar="rep_discordbot_endpoint", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Node Bot Endpoint", repconvar="rep_discord_endpoint", parent=discord_botConnection_List })
 
 -- discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot API-Key", parent=discord_botConnection_List })
 -- discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Node Bot API-Key", repconvar="rep_discordbot_api_key", parent=discord_botConnection_List })

@@ -31,12 +31,12 @@ util.AddNetworkString("connectDiscordID")
 util.AddNetworkString("discordPlayerTable")
 util.AddNetworkString("request_discordPlayerTable")
 
-CreateConVar("discordbot_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
-CreateConVar("discordbot_name", "Discord", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
-CreateConVar("discordbot_server_link", "https://discord.gg/", 1, "Sets the Discord server your bot is present on (eg: https://discord.gg/aBc123).")
-CreateConVar("discordbot_mute_round", 1, 1, "Mute the player until the end of the round.", 0, 1)
-CreateConVar("discordbot_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
-CreateConVar("discordbot_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
+CreateConVar("discord_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
+CreateConVar("discord_name", "Discord", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
+CreateConVar("discord_server_link", "https://discord.gg/", 1, "Sets the Discord server your bot is present on (eg: https://discord.gg/aBc123).")
+CreateConVar("discord_mute_round", 1, 1, "Mute the player until the end of the round.", 0, 1)
+CreateConVar("discord_mute_duration", 1, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
+CreateConVar("discord_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
 muted = {}
 
@@ -120,7 +120,7 @@ function commonRoundState()
 end
 
 function joinMessage(ply)
-  playerMessage("Join the discord server - " .. GetConVar("discordbot_server_link"):GetString(), ply)
+  playerMessage("Join the discord server - " .. GetConVar("discord_server_link"):GetString(), ply)
   playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
@@ -168,7 +168,7 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
   if (connectionIDs[ply:SteamID()]) then
     playerMessage("You are connected with discord.", ply)
   else
-    if (GetConVar("discordbot_auto_connect"):GetBool()) then
+    if (GetConVar("discord_auto_connect"):GetBool()) then
 
       tag = ply:Name()
       tag_utf8 = ""
@@ -227,10 +227,10 @@ hook.Add("OnStartRound", "discord_OnStartRound", function()
 end)
 hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(ply)
   if (commonRoundState() == 1) then
-    if (GetConVar("discordbot_mute_round"):GetBool()) then
+    if (GetConVar("discord_mute_round"):GetBool()) then
       mute(ply)
     else
-      local duration = GetConVar("discordbot_mute_duration"):GetInt()
+      local duration = GetConVar("discord_mute_duration"):GetInt()
       mute(ply, duration)
     end
   end

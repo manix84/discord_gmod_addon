@@ -1,7 +1,7 @@
 print('[Discord] Loading: utils/http.lua')
 function httpFetch(req, params, callback, tries)
   local defaultTries = 3
-  httpAdress = GetConVar("discordbot_endpoint"):GetString()
+  httpAdress = GetConVar("discord_endpoint"):GetString()
   http.Fetch(httpAdress..'/'..req,
     function(res)
       --print(res)
