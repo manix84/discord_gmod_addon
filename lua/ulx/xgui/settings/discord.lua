@@ -143,20 +143,20 @@ discord_playerConnections_table_List:SetSize( 393, 290 )
 discord_playerConnections_table_List:EnableVerticalScrollbar( false )
 discord_playerConnections_table_List:SetSpacing( 5 )
 
-discord_playerConnections_table_List.listview = xlib.makelistview{ x=0, y=5, w=393, h=200, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.listview = xlib.makelistview{ x=0, y=5, w=393, h=250, parent=discord_playerConnections_table_List }
 discord_playerConnections_table_List.listview:AddColumn( "Name" )
 -- discord_playerConnections_table_List.listview.Columns[1]:set
 discord_playerConnections_table_List.listview:AddColumn( "Role" )
 discord_playerConnections_table_List.listview:AddColumn( "DiscordID" )
 
 
-discord_playerConnections_table_List.AddItem(xlib.makelabel{ x=0, y=210, w=140, h=20, label="Player DiscordID", parent=discord_playerConnections_table_List })
-local discord_playerConnections_DiscordID_textBox = xlib.maketextbox{ x=150, y=210, w=200, h=20, label="", disabled=true, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.AddItem(xlib.makelabel{ x=0, y=265, w=80, h=20, label="Player DiscordID", parent=discord_playerConnections_table_List })
+local discord_playerConnections_DiscordID_textBox = xlib.maketextbox{ x=85, y=265, w=185, h=20, label="", disabled=true, parent=discord_playerConnections_table_List }
 discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_textBox)
 
 local discord_playerConnections_table_List__Selected_SteamID = nil
 
-local discord_playerConnections_DiscordID_saveButton = xlib.makebutton{x=355, y=210, w=38, label="Save", disabled=true, parent=discord_playerConnections_table_List}
+local discord_playerConnections_DiscordID_saveButton = xlib.makebutton{x=275, y=265, w=38, label="Save", disabled=true, parent=discord_playerConnections_table_List}
 
 local saveDiscordSteamConnection = function()
   local target_ply = player.GetBySteamID(discord_playerConnections_table_List__Selected_SteamID);
@@ -175,7 +175,7 @@ discord_playerConnections_DiscordID_saveButton.DoClick = saveDiscordSteamConnect
 discord_playerConnections_DiscordID_textBox.OnEnter = saveDiscordSteamConnection
 discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_saveButton)
 
-local discord_playerConnections_refreshButton = xlib.makebutton{x=0, y=265, w=75, label="Refresh List", parent=discord_playerConnections_table_List}
+local discord_playerConnections_refreshButton = xlib.makebutton{x=317, y=265, w=75, label="Refresh List", parent=discord_playerConnections_table_List}
 discord_playerConnections_refreshButton.DoClick = function()
   discord_playerConnections_table_List__Refresh()
   discord_playerConnections_table_List__Selected_SteamID = nil
