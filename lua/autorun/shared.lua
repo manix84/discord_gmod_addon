@@ -54,7 +54,7 @@ function isMuted(target_ply)
   return mutedPlayerTable[target_ply]
 end
 
-function mute(target_ply, duration)
+function mutePlayer(target_ply, duration)
   if (connectionIDs[target_ply:SteamID()]) then
     if (!isMuted(target_ply)) then
       httpFetch("mute", {mute=true, id=connectionIDs[target_ply:SteamID()]}, function(res)
@@ -203,9 +203,9 @@ end)
 
 hook.Add("MutePlayer", "discord_MutePlayer", function(target_ply, duration)
   if (duration > 0) then
-    mute(target_ply, duration)
+    mutePlayer(target_ply, duration)
   else
-    mute(target_ply)
+    mutePlayer(target_ply)
   end
 end)
 hook.Add("UnmutePlayer", "discord_UnmutePlayer", function(target_ply)
@@ -230,10 +230,10 @@ end)
 hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(target_ply)
   if (commonRoundState() == 1) then
     if (GetConVar("discord_mute_round"):GetBool()) then
-      mute(target_ply)
+      mutePlayer(target_ply)
     else
       local duration = GetConVar("discord_mute_duration"):GetInt()
-      mute(target_ply, duration)
+      mutePlayer(target_ply, duration)
     end
   end
 end)
