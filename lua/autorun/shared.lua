@@ -6,7 +6,7 @@ print('[Discord] Init')
 resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
   shouldDrawMute = false
-  muteIconAsset = Material("materials/icon256/mute.png")
+  muteIconAsset = Material("materials/icon256/mute.png", "smooth mips")
 
   net.Receive("drawMute", function()
     shouldDrawMute = net.ReadBool()
