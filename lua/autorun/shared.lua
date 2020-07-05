@@ -123,6 +123,19 @@ function joinMessage(ply)
   playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
+
+net.Receive("request_discordPlayerTable", function( len, calling_ply )
+  if !calling_ply:IsSuperAdmin() then return end
+
+  local connectionsJSON = util.TableToJSON(connectionIDs)
+  local compressedConnections = util.Compress(connectionsJSON)
+
+  net.Start("discordPlayerTable")
+  net.WriteUInt(#compressedConnections, 32)
+  net.WriteData(compressedConnections, #compressedConnections)
+  net.Broadcast()
+end)
+
 hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
   if (string.sub(msg,1,9) != '!discord ') then return end
   tag = string.sub(msg,10)
@@ -168,16 +181,6 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
       joinMessage(ply)
     end
   end
-end)
-
-net.Receive("request_discordPlayerTable", function()
-  local connectionsJSON = util.TableToJSON(connectionIDs)
-  local compressedConnections = util.Compress(connectionsJSON)
-
-  net.Start("discordPlayerTable")
-  net.WriteUInt(#compressedConnections, 32)
-  net.WriteData(compressedConnections, #compressedConnections)
-  net.Broadcast()
 end)
 
 hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(ply, discordID)
