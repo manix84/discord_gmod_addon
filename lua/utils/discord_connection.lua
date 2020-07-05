@@ -30,7 +30,7 @@ function writeConnectionIDs(connectionsTable)
   file.Write( FILEPATH..'.json', util.TableToJSON(connectionsTable, true) )
 
   local writtenConnectionsTable = file.Read( FILEPATH..'.json', 'DATA' )
-  if (writtenConnectionsTable == util.TableToJSON(connectionsTable)) then
+  if (writtenConnectionsTable == util.TableToJSON(connectionsTable, true)) then
     print_debug("Cache written.")
   else
     print_debug("Cache write failed.")
