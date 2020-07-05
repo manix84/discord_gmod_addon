@@ -119,8 +119,8 @@ discord_botConnection_List:SetSpacing( 5 )
 discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Node Bot Endpoint", parent=discord_botConnection_List })
 discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Node Bot Endpoint", repconvar="rep_discord_endpoint", parent=discord_botConnection_List })
 
--- discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot API-Key", parent=discord_botConnection_List })
--- discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Node Bot API-Key", repconvar="rep_discordbot_api_key", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot API-Key", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Node Bot API-Key", repconvar="rep_discord_api_key", parent=discord_botConnection_List })
 
 xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
 xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
