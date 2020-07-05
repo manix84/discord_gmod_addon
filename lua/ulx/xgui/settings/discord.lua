@@ -129,7 +129,7 @@ xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
 -------------------------Players Module-----------------------
 local discord_playerConnections_panel = xlib.makelistlayout{ w=415, h=318, parent=discord.panel }
 
-local connectionIDs = {}
+local steamIDToDiscordIDConnectionTable = {}
 
 --Player Connection
 local discord_playerConnections_table_Category = vgui.Create( "DCollapsibleCategory", discord_playerConnections_panel ) 
@@ -189,23 +189,23 @@ discord_playerConnections_table_List.listview.OnRowSelected = function( self, Li
   discord_playerConnections_DiscordID_textBox:SetDisabled( false )
   discord_playerConnections_DiscordID_saveButton:SetDisabled( false )
   discord_playerConnections_DiscordID_textBox:SetText(
-    connectionIDs[discord_playerConnections_table_List__Selected_SteamID] or ''
+    steamIDToDiscordIDConnectionTable[discord_playerConnections_table_List__Selected_SteamID] or ''
   )
 end
 
 net.Receive("discordPlayerTable", function()
   local len = net.ReadUInt(32)
-  local compressedConnections = net.ReadData(len)
-  local connectionsJSON = util.Decompress(compressedConnections)
+  local compressedSteamIDToDiscordIDConnection = net.ReadData(len)
+  local steamIDToDiscordIDConnectionJSON = util.Decompress(compressedSteamIDToDiscordIDConnection)
 
-  connectionIDs = util.JSONToTable(connectionsJSON)
+  steamIDToDiscordIDConnectionTable = util.JSONToTable(steamIDToDiscordIDConnectionJSON)
 
   discord_playerConnections_table_List.listview:Clear()
   for index, ply in pairs(player.GetAll()) do
     discord_playerConnections_table_List.listview:AddLine(
       ply:GetName(),
       ply:GetUserGroup(),
-      connectionIDs[ply:SteamID()],
+      steamIDToDiscordIDConnectionTable[ply:SteamID()],
       ply:SteamID() // Hidden SteamID column
     )
   end

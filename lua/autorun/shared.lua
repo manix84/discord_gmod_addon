@@ -40,8 +40,7 @@ CreateConVar("discord_mute_duration", 1, 1, "Sets how long, in seconds, you are 
 CreateConVar("discord_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
 
 local mutedPlayerTable = {}
-
-connectionIDs = getConnectionIDs()
+local steamIDToDiscordIDConnectionTable = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
 
 function drawMuteIcon(target_ply, shouldDrawMute)
@@ -55,9 +54,9 @@ function isMuted(target_ply)
 end
 
 function mutePlayer(target_ply, duration)
-  if (connectionIDs[target_ply:SteamID()]) then
+  if (steamIDToDiscordIDConnectionTable[target_ply:SteamID()]) then
     if (!isMuted(target_ply)) then
-      httpFetch("mute", {mute=true, id=connectionIDs[target_ply:SteamID()]}, function(res)
+      httpFetch("mute", {mute=true, id=steamIDToDiscordIDConnectionTable[target_ply:SteamID()]}, function(res)
         if (res) then
           --PrintTable(res)
           if (res.success) then
@@ -81,9 +80,9 @@ end
 
 function unmutePlayer(target_ply)
   if (target_ply) then
-    if (connectionIDs[target_ply:SteamID()]) then
+    if (steamIDToDiscordIDConnectionTable[target_ply:SteamID()]) then
       if (isMuted(target_ply)) then
-        httpFetch("mute", {mute=false, id=connectionIDs[target_ply:SteamID()]}, function(res)
+        httpFetch("mute", {mute=false, id=steamIDToDiscordIDConnectionTable[target_ply:SteamID()]}, function(res)
           if (res.success) then
             if (target_ply) then
               playerMessage("You're no longer muted in discord!", target_ply)
@@ -137,7 +136,7 @@ end)
 net.Receive("request_discordPlayerTable", function( len, calling_ply )
   if !calling_ply:IsSuperAdmin() then return end
 
-  local connectionsJSON = util.TableToJSON(connectionIDs)
+  local connectionsJSON = util.TableToJSON(steamIDToDiscordIDConnectionTable)
   local compressedConnections = util.Compress(connectionsJSON)
 
   net.Start("discordPlayerTable")
@@ -159,15 +158,15 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
     if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply) end
     if (res.tag and res.id) then
       playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. target_ply:SteamID() .. "'", target_ply) --lie! actually the discord id is bound! ;)
-      connectionIDs[target_ply:SteamID()] = res.id
-      writeConnectionIDs(connectionIDs)
+      steamIDToDiscordIDConnectionTable[target_ply:SteamID()] = res.id
+      writeConnectionIDs(steamIDToDiscordIDConnectionTable)
     end
   end)
   return ""
 end)
 
 hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(target_ply)
-  if (connectionIDs[target_ply:SteamID()]) then
+  if (steamIDToDiscordIDConnectionTable[target_ply:SteamID()]) then
     playerMessage("You are connected with discord.", target_ply)
   else
     if (GetConVar("discord_auto_connect"):GetBool()) then
