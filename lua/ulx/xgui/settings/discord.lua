@@ -201,13 +201,15 @@ net.Receive("discordPlayerTable", function()
   steamIDToDiscordIDConnectionTable = util.JSONToTable(steamIDToDiscordIDConnectionJSON)
 
   discord_playerConnections_table_List.listview:Clear()
-  for index, ply in pairs(player.GetAll()) do
-    discord_playerConnections_table_List.listview:AddLine(
-      ply:GetName(),
-      ply:GetUserGroup(),
-      steamIDToDiscordIDConnectionTable[ply:SteamID()],
-      ply:SteamID() // Hidden SteamID column
-    )
+  for index, target_ply in pairs(player.GetAll()) do
+    if not target_ply:IsBot() then
+      discord_playerConnections_table_List.listview:AddLine(
+        target_ply:GetName(),
+        target_ply:GetUserGroup(),
+        steamIDToDiscordIDConnectionTable[target_ply:SteamID()],
+        target_ply:SteamID() // Hidden SteamID column
+      )
+    end
   end
 end)
 function discord_playerConnections_table_List__Refresh()
