@@ -27,6 +27,7 @@ include('utils/discord_connection.lua')
 include('utils/http.lua')
 
 util.AddNetworkString("drawMute")
+util.AddNetworkString("connectDiscordID")
 util.AddNetworkString("discordPlayerTable")
 util.AddNetworkString("request_discordPlayerTable")
 
@@ -123,6 +124,13 @@ function joinMessage(ply)
   playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
 end
 
+net.Receive("connectDiscordID", function( len, calling_ply )
+  if !calling_ply:IsSuperAdmin() then return end
+
+  local target_ply = net.ReadEntity()
+  local discordID = net.ReadString()
+  addConnectionID(target_ply, discordID)
+end)
 
 net.Receive("request_discordPlayerTable", function( len, calling_ply )
   if !calling_ply:IsSuperAdmin() then return end
