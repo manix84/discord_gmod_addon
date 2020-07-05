@@ -27,6 +27,9 @@ include('utils/discord_connection.lua')
 include('utils/http.lua')
 
 util.AddNetworkString("drawMute")
+util.AddNetworkString("discordPlayerTable")
+util.AddNetworkString("request_discordPlayerTable")
+
 CreateConVar("discordbot_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
 CreateConVar("discordbot_name", "Discord", 1, "Sets the Plugin Prefix for helpermessages.") --The name which will be displayed in front of any Message
 CreateConVar("discordbot_server_link", "https://discord.gg/", 1, "Sets the Discord server your bot is present on (eg: https://discord.gg/aBc123).")
@@ -38,7 +41,6 @@ muted = {}
 
 connectionIDs = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
-
 
 function sendClientIconInfo(ply, mute)
   net.Start("drawMute")
@@ -166,6 +168,16 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
       joinMessage(ply)
     end
   end
+end)
+
+net.Receive("request_discordPlayerTable", function()
+  local connectionsJSON = util.TableToJSON(connectionIDs)
+  local compressedConnections = util.Compress(connectionsJSON)
+
+  net.Start("discordPlayerTable")
+  net.WriteUInt(#compressedConnections, 32)
+  net.WriteData(compressedConnections, #compressedConnections)
+  net.Broadcast()
 end)
 
 hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(ply, discordID)
