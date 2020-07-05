@@ -63,7 +63,7 @@ function mutePlayer(target_ply, duration)
           if (res.success) then
             if (duration) then
               playerMessage("You're muted in discord for " .. duration .. " seconds.", target_ply)
-              timer.Simple(duration, function() unmute(target_ply) end)
+              timer.Simple(duration, function() unmutePlayer(target_ply) end)
             else
               playerMessage("You're muted in discord until the round ends.", target_ply)
             end
@@ -79,7 +79,7 @@ function mutePlayer(target_ply, duration)
   end
 end
 
-function unmute(target_ply)
+function unmutePlayer(target_ply)
   if (target_ply) then
     if (connectionIDs[target_ply:SteamID()]) then
       if (isMuted(target_ply)) then
@@ -99,7 +99,7 @@ function unmute(target_ply)
     end
   else
     for target_ply,val in pairs(mutedPlayerTable) do
-      if val then unmute(target_ply) end
+      if val then unmutePlayer(target_ply) end
     end
   end
 end
@@ -209,23 +209,23 @@ hook.Add("MutePlayer", "discord_MutePlayer", function(target_ply, duration)
   end
 end)
 hook.Add("UnmutePlayer", "discord_UnmutePlayer", function(target_ply)
-  unmute(target_ply)
+  unmutePlayer(target_ply)
 end)
 
 hook.Add("PlayerSpawn", "discord_PlayerSpawn", function(target_ply)
-  unmute(target_ply)
+  unmutePlayer(target_ply)
 end)
 hook.Add("PlayerDisconnected", "discord_PlayerDisconnected", function(target_ply)
-  unmute(target_ply)
+  unmutePlayer(target_ply)
 end)
 hook.Add("ShutDown", "discord_ShutDown", function()
-  unmute()
+  unmutePlayer()
 end)
 hook.Add("OnEndRound", "discord_OnEndRound", function()
-  timer.Simple(0.1, function() unmute() end)
+  timer.Simple(0.1, function() unmutePlayer() end)
 end)
 hook.Add("OnStartRound", "discord_OnStartRound", function()
-  unmute()
+  unmutePlayer()
 end)
 hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(target_ply)
   if (commonRoundState() == 1) then
@@ -240,8 +240,8 @@ end)
 
 -- TTT Specific
 hook.Add("TTTEndRound", "discord_TTTEndRound", function()
-  timer.Simple(0.1, function() unmute() end)
+  timer.Simple(0.1, function() unmutePlayer() end)
 end)
 hook.Add("TTTBeginRound", "discord_TTTBeginRound", function()
-  unmute()
+  unmutePlayer()
 end)
