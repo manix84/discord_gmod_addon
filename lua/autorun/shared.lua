@@ -44,31 +44,31 @@ muted = {}
 connectionIDs = getConnectionIDs()
 backupConnectionIDs(connectionIDs)
 
-function sendClientIconInfo(ply, mute)
+function sendClientIconInfo(target_ply, mute)
   net.Start("drawMute")
   net.WriteBool(mute)
-  net.Send(ply)
+  net.Send(target_ply)
 end
 
-function isMuted(ply)
-  return muted[ply]
+function isMuted(target_ply)
+  return muted[target_ply]
 end
 
-function mute(ply, duration)
-  if (connectionIDs[ply:SteamID()]) then
-    if (!isMuted(ply)) then
-      httpFetch("mute", {mute=true, id=connectionIDs[ply:SteamID()]}, function(res)
+function mute(target_ply, duration)
+  if (connectionIDs[target_ply:SteamID()]) then
+    if (!isMuted(target_ply)) then
+      httpFetch("mute", {mute=true, id=connectionIDs[target_ply:SteamID()]}, function(res)
         if (res) then
           --PrintTable(res)
           if (res.success) then
             if (duration) then
-              playerMessage("You're muted in discord for " .. duration .. " seconds.", ply)
-              timer.Simple(duration, function() unmute(ply) end)
+              playerMessage("You're muted in discord for " .. duration .. " seconds.", target_ply)
+              timer.Simple(duration, function() unmute(target_ply) end)
             else
-              playerMessage("You're muted in discord until the round ends.", ply)
+              playerMessage("You're muted in discord until the round ends.", target_ply)
             end
-            sendClientIconInfo(ply, true)
-            muted[ply] = true
+            sendClientIconInfo(target_ply, true)
+            muted[target_ply] = true
           end
           if (res.error) then
             playerMessage("Error: " .. res.err)
@@ -79,17 +79,17 @@ function mute(ply, duration)
   end
 end
 
-function unmute(ply)
-  if (ply) then
-    if (connectionIDs[ply:SteamID()]) then
-      if (isMuted(ply)) then
-        httpFetch("mute", {mute=false, id=connectionIDs[ply:SteamID()]}, function(res)
+function unmute(target_ply)
+  if (target_ply) then
+    if (connectionIDs[target_ply:SteamID()]) then
+      if (isMuted(target_ply)) then
+        httpFetch("mute", {mute=false, id=connectionIDs[target_ply:SteamID()]}, function(res)
           if (res.success) then
-            if (ply) then
-              playerMessage("You're no longer muted in discord!", ply)
+            if (target_ply) then
+              playerMessage("You're no longer muted in discord!", target_ply)
             end
-            sendClientIconInfo(ply, false)
-            muted[ply] = false
+            sendClientIconInfo(target_ply, false)
+            muted[target_ply] = false
           end
           if (res.error) then
             print("Error: " .. res.err)
@@ -98,8 +98,8 @@ function unmute(ply)
       end
     end
   else
-    for ply,val in pairs(muted) do
-      if val then unmute(ply) end
+    for target_ply,val in pairs(muted) do
+      if val then unmute(target_ply) end
     end
   end
 end
@@ -120,10 +120,11 @@ function commonRoundState()
   return -1
 end
 
-function joinMessage(ply)
-  playerMessage("Join the discord server - " .. GetConVar("discord_server_link"):GetString(), ply)
-  playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", ply)
+function joinMessage(target_ply)
+  playerMessage("Join the discord server - " .. GetConVar("discord_server_link"):GetString(), target_ply)
+  playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", target_ply)
 end
+
 
 net.Receive("connectDiscordID", function( len, calling_ply )
   if !calling_ply:IsSuperAdmin() then return end
@@ -145,7 +146,7 @@ net.Receive("request_discordPlayerTable", function( len, calling_ply )
   net.Broadcast()
 end)
 
-hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
+hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
   if (string.sub(msg,1,9) != '!discord ') then return end
   tag = string.sub(msg,10)
   tag_utf8 = ""
@@ -154,24 +155,24 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(ply, msg)
     tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
   end
   httpFetch("connect", {tag=tag_utf8}, function(res)
-    if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", ply) end
-    if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", ply) end
+    if (res.answer == 0) then playerMessage("No guilde member with a discord tag like '" .. tag .. "' found.", target_ply) end
+    if (res.answer == 1) then playerMessage("Found more than one user with a discord tag like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply) end
     if (res.tag and res.id) then
-      playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. ply:SteamID() .. "'", ply) --lie! actually the discord id is bound! ;)
-      connectionIDs[ply:SteamID()] = res.id
+      playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. target_ply:SteamID() .. "'", target_ply) --lie! actually the discord id is bound! ;)
+      connectionIDs[target_ply:SteamID()] = res.id
       writeConnectionIDs(connectionIDs)
     end
   end)
   return ""
 end)
 
-hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
-  if (connectionIDs[ply:SteamID()]) then
-    playerMessage("You are connected with discord.", ply)
+hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(target_ply)
+  if (connectionIDs[target_ply:SteamID()]) then
+    playerMessage("You are connected with discord.", target_ply)
   else
     if (GetConVar("discord_auto_connect"):GetBool()) then
 
-      tag = ply:Name()
+      tag = target_ply:Name()
       tag_utf8 = ""
 
       for p, c in utf8.codes(tag) do
@@ -180,42 +181,42 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(ply)
       httpFetch("connect", {tag=tag_utf8}, function(res)
      	 -- playerMessage("Attempting to match your name, " .. tag)
         if (res.tag and res.id) then
-          playerMessage("Discord tag '" .. res.tag .. "' successfully bound to SteamID '" .. ply:SteamID() .. "'", ply)
-          addConnectionID(ply, res.id)
+          playerMessage("Discord tag '" .. res.tag .. "' successfully bound to SteamID '" .. target_ply:SteamID() .. "'", target_ply)
+          addConnectionID(target_ply, res.id)
         else
-          joinMessage(ply)
+          joinMessage(target_ply)
         end
       end)
     else
-      joinMessage(ply)
+      joinMessage(target_ply)
     end
   end
 end)
 
-hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(ply, discordID)
-  addConnectionID(ply, discordID)
+hook.Add("ConnectPlayer", "discord_ConnectPlayer", function(target_ply, discordID)
+  addConnectionID(target_ply, discordID)
 end)
 
-hook.Add("DisconnectPlayer", "discord_DisconnectPlayer", function(ply)
-  removeConnectionID(ply)
+hook.Add("DisconnectPlayer", "discord_DisconnectPlayer", function(target_ply)
+  removeConnectionID(target_ply)
 end)
 
-hook.Add("MutePlayer", "discord_MutePlayer", function(ply, duration)
+hook.Add("MutePlayer", "discord_MutePlayer", function(target_ply, duration)
   if (duration > 0) then
-    mute(ply, duration)
+    mute(target_ply, duration)
   else
-    mute(ply)
+    mute(target_ply)
   end
 end)
-hook.Add("UnmutePlayer", "discord_UnmutePlayer", function(ply)
-  unmute(ply)
+hook.Add("UnmutePlayer", "discord_UnmutePlayer", function(target_ply)
+  unmute(target_ply)
 end)
 
-hook.Add("PlayerSpawn", "discord_PlayerSpawn", function(ply)
-  unmute(ply)
+hook.Add("PlayerSpawn", "discord_PlayerSpawn", function(target_ply)
+  unmute(target_ply)
 end)
-hook.Add("PlayerDisconnected", "discord_PlayerDisconnected", function(ply)
-  unmute(ply)
+hook.Add("PlayerDisconnected", "discord_PlayerDisconnected", function(target_ply)
+  unmute(target_ply)
 end)
 hook.Add("ShutDown", "discord_ShutDown", function()
   unmute()
@@ -226,13 +227,13 @@ end)
 hook.Add("OnStartRound", "discord_OnStartRound", function()
   unmute()
 end)
-hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(ply)
+hook.Add("PostPlayerDeath", "discord_PostPlayerDeath", function(target_ply)
   if (commonRoundState() == 1) then
     if (GetConVar("discord_mute_round"):GetBool()) then
-      mute(ply)
+      mute(target_ply)
     else
       local duration = GetConVar("discord_mute_duration"):GetInt()
-      mute(ply, duration)
+      mute(target_ply, duration)
     end
   end
 end)
