@@ -86,13 +86,13 @@ discord_settings_mute_options_List.AddItem(mute_duration)
 
 --Config
 local discord_settings_config_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
-discord_settings_config_Category:SetSize( 393, 75 )
+discord_settings_config_Category:SetSize( 393, 115 )
 discord_settings_config_Category:SetExpanded( false )
 discord_settings_config_Category:SetLabel( "Config" )
 
 local discord_settings_config_List = vgui.Create( "DPanelList", discord_settings_config_Category )
 discord_settings_config_List:SetPos( 10, 25 )
-discord_settings_config_List:SetSize( 393, 75 )
+discord_settings_config_List:SetSize( 393, 115 )
 discord_settings_config_List:EnableVerticalScrollbar( false )
 discord_settings_config_List:SetSpacing( 5 )
 
@@ -102,7 +102,15 @@ discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, 
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
 discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discord_server_link", parent=discord_settings_config_List })
 
-discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=55, label="Attempt to connect Discord and Steam ID's Automatically", repconvar="rep_discord_auto_connect", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=50, h=20, label="Set Language", parent=discord_settings_config_List })
+local discord_settings_config_Language_combobox = xlib.makecombobox{ x=150, y=50, w=243, parent=discord_settings_config_List }
+discord_settings_config_Language_combobox:AddChoice("English", "eng", true)
+discord_settings_config_Language_combobox:SetDisabled(true)
+discord_settings_config_List.AddItem(discord_settings_config_Language_combobox)
+
+discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=75, label="Attempt to connect Discord and Steam Names automatically.", repconvar="rep_discord_auto_connect", parent=discord_settings_config_List })
+
+discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=95, label="Enable debug messages to console.", repconvar="rep_discord_debug", parent=discord_settings_config_List })
 
 --Bot Connection
 local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 

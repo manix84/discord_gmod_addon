@@ -7,5 +7,7 @@ local function init()
   ULib.replicatedWritableCvar( "discord_mute_duration", "rep_discord_mute_duration", GetConVarNumber( "discord_mute_duration" ), true, true, "xgui_gmsettings" )
   ULib.replicatedWritableCvar( "discord_mute_round", "rep_discord_mute_round", GetConVarNumber( "discord_mute_round" ), true, true, "xgui_gmsettings" )
   ULib.replicatedWritableCvar( "discord_auto_connect", "rep_discord_auto_connect", GetConVarNumber( "discord_auto_connect" ), true, true, "xgui_gmsettings" )
+  ULib.replicatedWritableCvar( "discord_debug", "rep_discord_debug", GetConVarNumber( "discord_debug" ), true, true, "xgui_gmsettings" )
+  ULib.replicatedWritableCvar( "discord_language", "rep_discord_language", GetConVarNumber( "discord_language" ), true, true, "xgui_gmsettings" )
 end
 xgui.addSVModule( "discordbot", init )
