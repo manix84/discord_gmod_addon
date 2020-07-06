@@ -145,7 +145,7 @@ net.Receive("request_discordPlayerTable", function( len, calling_ply )
   net.Start("discordPlayerTable")
   net.WriteUInt(#compressedConnections, 32)
   net.WriteData(compressedConnections, #compressedConnections)
-  net.Broadcast()
+  net.Send(calling_ply)
 end)
 
 hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
