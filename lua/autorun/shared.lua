@@ -47,6 +47,7 @@ if (setLanguage == 'eng') then
 else
   translations = include('translations/english.lua')
 end
+print_debug("Translation strings:"..util.TableToJSON(translations, true))
 
 local mutedPlayerTable = {}
 local steamIDToDiscordIDConnectionTable = getConnectionIDs()
