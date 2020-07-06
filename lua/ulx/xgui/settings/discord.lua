@@ -102,9 +102,11 @@ discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, 
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
 discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discord_server_link", parent=discord_settings_config_List })
 
+-- Coming soon! The combobox isn't working yet, so i've disabled it for now.
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=50, h=20, label="Set Language", parent=discord_settings_config_List })
 local discord_settings_config_Language_combobox = xlib.makecombobox{ x=150, y=50, w=243, parent=discord_settings_config_List }
 discord_settings_config_Language_combobox:AddChoice("English", "eng", true)
+discord_settings_config_Language_combobox:AddChoice("Deutsche", "deu", false)
 discord_settings_config_Language_combobox:SetDisabled(true)
 discord_settings_config_List.AddItem(discord_settings_config_Language_combobox)
 
