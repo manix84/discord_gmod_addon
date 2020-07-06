@@ -166,7 +166,7 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
       playerMessage('MULTIPLE_NAMES_FOUND', target_ply, tag)
     end
     if (res.tag and res.id) then
-      playerMessage('CONNECTION_SUCCESSFUL', target_ply, res.tag, target_ply:SteamID())
+      playerMessage('CONNECTION_SUCCESSFUL', target_ply, target_ply:Nick(), target_ply:SteamID(), res.tag)
       steamIDToDiscordIDConnectionTable[target_ply:SteamID()] = res.id
       writeConnectionIDs(steamIDToDiscordIDConnectionTable)
     end
