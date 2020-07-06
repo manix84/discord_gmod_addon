@@ -37,6 +37,16 @@ CreateConVar("discord_server_link", "https://discord.gg/", 1, "Sets the Discord 
 CreateConVar("discord_mute_round", 1, 1, "Mute the player until the end of the round.", 0, 1)
 CreateConVar("discord_mute_duration", 5, 1, "Sets how long, in seconds, you are muted for after death. No effect if mute_round is on. ", 1, 60)
 CreateConVar("discord_auto_connect", 0, 1, "Attempt to automatically match player name to discord name. This happens silently when the player connects. If it fails, it will prompt the user with the '!discord NAME' message.", 0, 1)
+CreateConVar("discord_language", "eng", 1, "Set the language you want user prompts to be in.")
+
+local setLanguage = GetConVar("discord_language"):GetString()
+local translations = {}
+print_debug("Language Set: " .. setLanguage)
+if (setLanguage == 'eng') then
+  translations = include('translations/english.lua')
+else
+  translations = include('translations/english.lua')
+end
 
 local mutedPlayerTable = {}
 local steamIDToDiscordIDConnectionTable = getConnectionIDs()
@@ -59,16 +69,16 @@ function mutePlayer(target_ply, duration)
           --PrintTable(res)
           if (res.success) then
             if (duration) then
-              playerMessage("You're muted for " .. duration .. " seconds.", target_ply)
+              playerMessage(translations['MUTED_FOR_DURATION'], target_ply, duration)
               timer.Simple(duration, function() unmutePlayer(target_ply) end)
             else
-              playerMessage("You're muted until the round ends.", target_ply)
+              playerMessage(translations['MUTED_FOR_ROUND'], target_ply)
             end
             drawMuteIcon(target_ply, true)
             mutedPlayerTable[target_ply] = true
           end
           if (res.error) then
-            playerMessage("Error: " .. res.err)
+            announceMessage(translations['ERROR_MESSAGE'], res.err)
           end
         end
       end)
@@ -83,7 +93,7 @@ function unmutePlayer(target_ply)
         httpFetch("mute", {mute=false, id=steamIDToDiscordIDConnectionTable[target_ply:SteamID()]}, function(res)
           if (res.success) then
             if (target_ply) then
-              playerMessage("You're no longer muted.", target_ply)
+              playerMessage(translations['UNMUTED'], target_ply)
             end
             drawMuteIcon(target_ply, false)
             mutedPlayerTable[target_ply] = false
@@ -120,8 +130,8 @@ function commonRoundState()
 end
 
 function joinMessage(target_ply)
-  playerMessage("Join the discord server - " .. GetConVar("discord_server_link"):GetString(), target_ply)
-  playerMessage("Then link up by saying '!discord DISCORD_NAME' in the chat. E.g. '!discord Manix84'", target_ply)
+  playerMessage(translations['JOIN_DISCORD_PROMPT'], target_ply, GetConVar("discord_server_link"):GetString())
+  playerMessage(translations['CONNECTION_INSTRUCTIONS'], target_ply)
 end
 
 net.Receive("connectDiscordID", function( len, calling_ply )
@@ -160,13 +170,13 @@ hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
   end
   httpFetch("connect", {tag=tag_utf8}, function(res)
     if (res.answer == 0) then
-      playerMessage("No server member with a name like '" .. tag .. "' found.", target_ply)
+      playerMessage(translations['NAME_NOT_FOUND'], target_ply, tag)
     end
     if (res.answer == 1) then
-      playerMessage("Found more than one user with a name like '" .. tag .. "'. Try your full tag, EG: Manix84#1234", target_ply)
+      playerMessage(translations['MULTIPLE_NAMES_FOUND'], target_ply, tag)
     end
     if (res.tag and res.id) then
-      playerMessage("Discord tag '" .. res.tag .. "' successfully boundet to SteamID '" .. target_ply:SteamID() .. "'", target_ply) --lie! actually the discord id is bound! ;)
+      playerMessage(translations['CONNECTION_SUCCESSFUL'], target_ply, res.tag, target_ply:SteamID())
       steamIDToDiscordIDConnectionTable[target_ply:SteamID()] = res.id
       writeConnectionIDs(steamIDToDiscordIDConnectionTable)
     end
@@ -176,7 +186,7 @@ end)
 
 hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(target_ply)
   if (steamIDToDiscordIDConnectionTable[target_ply:SteamID()]) then
-    playerMessage("You are connected with discord.", target_ply)
+    playerMessage(translations['WELCOME_CONNECTED'], target_ply)
   else
     if (GetConVar("discord_auto_connect"):GetBool()) then
       tag = target_ply:Name()
@@ -186,7 +196,7 @@ hook.Add("PlayerInitialSpawn", "discord_PlayerInitialSpawn", function(target_ply
         tag_utf8 = string.Trim(tag_utf8 .. " " .. c)
       end
       httpFetch("connect", {tag=tag_utf8}, function(res)
-     	 -- playerMessage("Attempting to match your name, " .. tag)
+        -- playerMessage(translations['AUTOMATIC_MATCH'], target_ply, tag)
         if (res.tag and res.id) then
           playerMessage("Discord tag '" .. res.tag .. "' successfully bound to SteamID '" .. target_ply:SteamID() .. "'", target_ply)
           addConnectionID(target_ply, res.id)
