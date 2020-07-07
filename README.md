@@ -1,5 +1,4 @@
 # Discord for GMod (The GMod Addon)
-
 ![Icon](https://raw.githubusercontent.com/manix84/discord_gmod_addon/master/images/icon/icon_128x.png)
 
 >Dead players tell no tales!
@@ -20,13 +19,13 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 - Mute a Player for the entire round, or simply for a few seconds.
 - Automatically connect players when they join your server. If a new player joins, they're on the Discord server already, and use the same name, they'll get connected without even prompting them.
 - Language support (currently for player messages):
-  - English (Default)
-  - German
+    - English (Default)
+    - German
 - ULX Support:
-  - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
-  - Added Discord Settings
-    - "Settings" - You can change any of the Console Variables on a per Map basis.
-    - "Player Connections" - You can add a Steam/Discord ID connection from the ULX menu.
+    - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
+    - Added Discord Settings
+        - "Settings" - You can change any of the Console Variables on a per Map basis.
+        - "Player Connections" - You can add a Steam/Discord ID connection from the ULX menu.
 - Node Bot KeepAlive. Some bot hosts kill the bot if they don't get connections after a while. This option will keep the bot running, between sessions.
 
 ## Getting Started
@@ -37,7 +36,6 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 - You must have a [Nodejs](https://nodejs.org) installed locally on your GMod server, or on a publically accessable server (I used [Heroku.com](https://heroku.com), which is the easier of the two options)
 
 ### Installation
-
 1. First and formost, you need to go setup the Discord Bot, so...
   - Go over to: [manix84/discord_gmod_bot](https://github.com/manix84/discord_gmod_bot.git)
   - Setup your node server
@@ -61,17 +59,15 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
   - `discord_auto_connect`: If enabled, when an unknown player connects, it will try to match the Steam Nickname, to the Discord Nickname.  (1=Enabled, 0=Disabled)
 4. You're all setup, so now, connect your Steam and Discord accounts:
   - Connect your Steam Account with the bot by typing `!discord YourDiscordTag` in the ingame chat (E.G `!discord Manix84`).
-    - If you're having trouble, try your full discord name (E.G: `!discord Manix84#8429`). This should only be necessary if there are two or more people with the same name.
+      - If you're having trouble, try your full discord name (E.G: `!discord Manix84#8429`). This should only be necessary if there are two or more people with the same name.
   - So long as you're in correct **DISCORD_GUILD** and **DISCORD_CHANNEL**, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
 
 ## Credits
-
 - Marcel Transier - The original creator of [ttt_discord_bot](https://github.com/marceltransier/ttt_discord_bot.git), from which this is based.
 - I used [discord.js](https://discord.js.org) in this project. Thanks for the easy opportunity writing a discord bot in javascript!
 - Thanks for the great Garry's Mod gamemode [Trouble in Terrorist Town](http://ttt.badking.net) I made this bot for.
 
 ## Contributing
-
 1. Fork it (<https://github.com/manix84/discord_gmod_addon/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
@@ -80,13 +76,17 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 
 ### Adding a language
 1. Just add a file into `/lua/locale/[language_name].lua`.
-  - The translation tool will pick it up automatically.
-  - If you miss a translation key, they user will see "TRANSLATION MISSING", so... try to avoid that.
+    - The translation tool will pick it up automatically.
+    - If you miss a translation key, they user will see "TRANSLATION MISSING", so... try to avoid that.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Screenshots
+
+### Muting in action
+![Muting in action](https://i.imgur.com/a2eBESP.png)
+
 ### ULX Commands
 ![ULX Cmds](https://i.imgur.com/pWUKAO8.png)
 
@@ -95,6 +95,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### ULX Settings - Player Connections
 ![ULX Settings - Player Connections](https://i.imgur.com/r1caKBV.png)
-
-### Muting in action
-![Muting in action](https://i.imgur.com/a2eBESP.png)
