@@ -1,17 +1,5 @@
-include('./logging.lua')
-
-CreateConVar("discord_language", "eng", 1, "Set the language you want user prompts to be in.")
-
-local setLanguage = GetConVar("discord_language"):GetString()
-print_debug("Language Set: ", setLanguage)
-
-local translations = {}
-if (setLanguage == 'deu') then -- German
-  translations = include('locale/deutsche.lua')
-else -- English (Default)
-  translations = include('locale/english.lua')
-end
-print_debug("Translation strings:", util.TableToJSON(translations, true))
+include('./locale.lua')
+local translations = getTranslations()
 
 function playerMessage(translation_key, target_ply, ...)
   local translation_string = translations[translation_key] or ''
