@@ -19,6 +19,9 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 - Discord Server link. When someone connects, they get told to join your server, if they're not already connected.
 - Mute a Player for the entire round, or simply for a few seconds.
 - Automatically connect players when they join your server. If a new player joins, they're on the Discord server already, and use the same name, they'll get connected without even prompting them.
+- Language support (currently for player messages):
+  - English (Default)
+  - German
 - ULX Support:
   - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
   - Added Discord Settings
@@ -74,6 +77,11 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
+
+### Adding a language
+1. Just add a file into `/lua/locale/[language_name].lua`.
+  - The translation tool will pick it up automatically.
+  - If you miss a translation key, they user will see "TRANSLATION MISSING", so... try to avoid that.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
