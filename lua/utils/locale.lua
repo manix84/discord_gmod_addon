@@ -26,10 +26,25 @@ end
 getSelectedLanguage()
 print_debug("Selected language: ", selectedLanguage)
 
+local translationsCache = {}
+local function getTranslationsCache()
+  if (table.Count(translationsCache) <= 0) then
+    print_debug('Caching language files:')
+    local localesTable = getAvailableLanguages()
+    for i, localeFileName in ipairs(localesTable) do
+      translationsCache[localeFileName] = include('locale/'..localeFileName..'.lua')
+      print_debug('  -', 'locale/'..localeFileName..'.lua')
+    end
+  end
+  return translationsCache
+end
+getTranslationsCache()
+
 local translations = {}
 function getTranslations()
-  local selectedLanguage = getSelectedLanguage();
-  translations = include('locale/'..selectedLanguage..'.lua')
+  local selectedLanguage = getSelectedLanguage()
+  local translationsCache = getTranslationsCache()
+  translations = translationsCache[selectedLanguage]
   return translations
 end
 getTranslations()
