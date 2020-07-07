@@ -6,8 +6,8 @@ local availableLanguages = {}
 function getAvailableLanguages()
   if (table.Count(availableLanguages) <= 0) then
     local foundLocaleFiles, _ = file.Find('locale/*.lua', 'lsv')
-    for i, localeFile in ipairs(foundLocaleFiles) do
-      table.insert(availableLanguages, string.Replace(localeFile, '.lua', ''))
+    for i, localeFileName in ipairs(foundLocaleFiles) do
+      table.insert(availableLanguages, string.Replace(localeFileName, '.lua', ''))
     end
   end
   return availableLanguages
@@ -15,16 +15,16 @@ end
 getAvailableLanguages()
 print_debug("Available languages: ", util.TableToJSON(availableLanguages))
 
-local setLanguage = 'english'
+local selectedLanguage = 'english'
 function getSelectedLanguage()
   local selectedLanguage = GetConVar("discord_language"):GetString()
   if (table.HasValue(getAvailableLanguages(), selectedLanguage)) then
-    setLanguage = selectedLanguage
+    selectedLanguage = selectedLanguage
   end
-  return setLanguage
+  return selectedLanguage
 end
 getSelectedLanguage()
-print_debug("Language: ", setLanguage)
+print_debug("Selected language: ", selectedLanguage)
 
 local translations = {}
 function getTranslations()
