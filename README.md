@@ -21,7 +21,7 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 - Language support (currently for player messages):
     - English (Default)
     - German
-- ULX Support:
+- [ULX](https://steamcommunity.com/sharedfiles/filedetails/?id=557962280) Support:
     - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
     - Added Discord Settings
         - "Settings" - You can change any of the Console Variables on a per Map basis.
@@ -32,8 +32,8 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 If you need a step-by-step tutorial, follow my [guide at steam](http://steamcommunity.com/sharedfiles/filedetails/?id=1351369388)
 
 ### Prerequisites
-- You have to have already installed a Garry's Mod Server with the TTT Gamemode.
-- You must have a [Nodejs](https://nodejs.org) installed locally on your GMod server, or on a publically accessable server (I used [Heroku.com](https://heroku.com), which is the easier of the two options)
+- You have to have already installed a [Garry's Mod](https://store.steampowered.com/app/4000/Garrys_Mod/) Server with the TTT Gamemode.
+- You must have a [NodeJS](https://nodejs.org) installed locally on your GMod server, or on a publically accessable server (I used [Heroku.com](https://heroku.com), which is the easier of the two options)
 
 ### Installation
 1. First and formost, you need to go setup the Discord Bot, so...
