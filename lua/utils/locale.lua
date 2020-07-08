@@ -50,3 +50,33 @@ end
 getTranslations()
 print_debug("Translations:", util.TableToJSON(translations, true))
 
+util.AddNetworkString("discordAvailableLanguages")
+util.AddNetworkString("request_discordAvailableLanguages")
+net.Receive("request_discordAvailableLanguages", function( len, calling_ply )
+  if (!calling_ply:IsSuperAdmin()) then
+    return
+  end
+  local availableLanguages = getAvailableLanguages()
+  local availableLanguagesJSON = util.TableToJSON(availableLanguages)
+  local availableLanguagesCompressed = util.Compress(availableLanguagesJSON)
+
+  net.Start("discordAvailableLanguages")
+  net.WriteUInt(#availableLanguagesCompressed, 32)
+  net.WriteData(availableLanguagesCompressed, #availableLanguagesCompressed)
+  net.Send(calling_ply)
+end)
+
+util.AddNetworkString("discordSelectedLanguage")
+util.AddNetworkString("request_discordSelectedLanguage")
+net.Receive("request_discordSelectedLanguage", function( len, calling_ply )
+  if (!calling_ply:IsSuperAdmin()) then
+    return
+  end
+  local selectedLanguage = getSelectedLanguage()
+  local selectedLanguageCompressed = util.Compress(selectedLanguage)
+
+  net.Start("discordSelectedLanguage")
+  net.WriteUInt(#selectedLanguageCompressed, 32)
+  net.WriteData(selectedLanguageCompressed, #selectedLanguageCompressed)
+  net.Send(calling_ply)
+end)

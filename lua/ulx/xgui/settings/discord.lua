@@ -1,3 +1,4 @@
+AddCSLuaFile('utils/logging.lua')
 -- GMod Discord Bot Server settings module for ULX GUI -- by Manxi84
 --   A settings module for modifying server settings for GMod Discord Bot.
 
@@ -102,13 +103,53 @@ discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, 
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
 discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discord_server_link", parent=discord_settings_config_List })
 
+local selectedLanguageKey = ''
+
+net.Receive("discordSelectedLanguage", function()
+  local len = net.ReadUInt(32)
+  local selectedLanguageCompressed = net.ReadData(len)
+  selectedLanguageKey = util.Decompress(selectedLanguageCompressed)
+end)
+local function get_selectedLanguage()
+  net.Start("request_discordSelectedLanguage")
+  net.SendToServer()
+end
+get_selectedLanguage()
+
 -- Coming soon! The combobox isn't working yet, so i've disabled it for now.
 discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=50, h=20, label="Set Language", parent=discord_settings_config_List })
 local discord_settings_config_Language_combobox = xlib.makecombobox{ x=150, y=50, w=243, parent=discord_settings_config_List }
-discord_settings_config_Language_combobox:AddChoice("English", "eng", true)
-discord_settings_config_Language_combobox:AddChoice("Deutsche", "deu", false)
 discord_settings_config_Language_combobox:SetDisabled(true)
 discord_settings_config_List.AddItem(discord_settings_config_Language_combobox)
+discord_settings_config_Language_combobox.OnSelect = function( self, index, value, data )
+  RunConsoleCommand('rep_discord_language', tostring(data))
+  get_selectedLanguage()
+end
+
+net.Receive("discordAvailableLanguages", function()
+  local len = net.ReadUInt(32)
+  local availableLanguagesCompressed = net.ReadData(len)
+  local availableLanguagesJSON = util.Decompress(availableLanguagesCompressed)
+
+  availableLanguagesTable = util.JSONToTable(availableLanguagesJSON)
+
+  discord_settings_config_Language_combobox:Clear()
+  for i, languageName in ipairs(availableLanguagesTable) do
+    local languageTitle = string.upper(string.sub(languageName, 1, 1))..string.lower(string.sub(languageName, 2))
+    local isSelected = (languageName == selectedLanguageKey)
+    discord_settings_config_Language_combobox:AddChoice(
+      languageTitle,
+      languageName,
+      isSelected
+    )
+    discord_settings_config_Language_combobox:SetDisabled( i <= 1 )
+  end
+end)
+local function get_availableLanguages()
+  net.Start("request_discordAvailableLanguages")
+  net.SendToServer()
+end
+get_availableLanguages()
 
 discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=75, label="Attempt to connect Discord and Steam Names automatically.", repconvar="rep_discord_auto_connect", parent=discord_settings_config_List })
 
