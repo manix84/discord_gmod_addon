@@ -62,6 +62,13 @@ xgui.addSettingModule( "Discord", discord, "icon16/phone_sound.png" )
 ------------------------Settings Module-----------------------
 local discord_settings_panel = xlib.makelistlayout{ w=415, h=318, parent=discord.panel }
 
+xlib.makelabel{
+  x=5, y=0,
+  w=425, h=20,
+  label="These settings do not save when the server changes maps, is restarted, or crashes.",
+  parent=discord_settings_panel
+}
+
 --Mute Options
 local discord_settings_mute_options_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
 discord_settings_mute_options_Category:SetSize( 393, 45 )
