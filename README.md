@@ -46,29 +46,33 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
             - `API_KEY`: (Optional, but super recommended) This MUST match the GMod server. It can be anything.
             - `DISCORD_GUILD`: A copy of the Server/Guild ID.
             - `DISCORD_CHANNEL`: A copy of the Voice Channel ID.
+
+    - Setup your node server
+        > The following assumes you're using Heroku.com. If not, please skip.
+        - Create a free account on [Heroku.com](https://heroku.com).
+        - Create a pipeline, which deploys the [Discord Gmod Bot](https://github.com/manix84/discord_gmod_bot.git)
+        - Set the Environment Variables:
+            - `API_KEY`: (Optional, but super recommended) This MUST match the GMod server. It can be anything.
+            - `DISCORD_GUILD`: A copy of the Server/Guild ID.
+            - `DISCORD_CHANNEL`: A copy of the Voice Channel ID.
                 - !If you're stuggling to get the Discord Guild/Channel ID, Discord have a [guide](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to getting the ID's.
             - `DISCORD_TOKEN`: This allows the node bot to talk to the Discord Bot (You will get this in Step 3 below)
-       - Make sure the Node Bot server is running. Heroku will run is as a web instance.
+                - To get the `DISCORD_TOKEN`, you'll need to create a [Discord Bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). You'll need to follow these instructions to invite the bot, into your server.
+                - Make sure you grant the bot the permissions to Mute Members.
+    - Make sure the Node Bot server is running. Heroku will run is as a web instance.
 2. Install this Mod (I recommend using the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2155238885))
-    - If you don't want to use steam workshop, you can just extract this project into `/garrysmod/addons/discord'.
-3. [Create a Discord Bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token), invite him to your server and paste the token in the config
-    - Add the Bot Token to your Node Bot Environment Variables 
-        -  `DISCORD_TOKEN`
-    - Make sure you grant the bot the permissions to Mute Members.
-4. Make sure you've got the `server convars` in `/garrysmod/cfg/server.cfg`
+    - If you don't want to use steam workshop, go over to: [manix84/discord_gmod_addon](https://github.com/manix84/discord_gmod_addon.git) and just extract the project into `/garrysmod/addons/discord'.
+3. Make sure you've got the `server convars` in `/garrysmod/cfg/server.cfg`
     - `discord_endpoint`: The Node Bot remote endpoint (EG: https://my-awesome-discord-bot.herokuapp.com:443)
     - `discord_api_key`: This MUST match any value you set for the Node Bot. 
-    - And the totally optional ones:
-        - `discord_server_link`: This is the share link that is advertised on your gmod server.
-        - `discord_mute_round`: Do you want to mute the end of the round after death? (1=Yes, 0=No)
-        - `discord_mute_duration`: How long do you want the player to be muted after death, in seconds. Does nothing if `discord_mute_round` is set to `1`.
-        - `discord_auto_connect`: If enabled, when an unknown player connects, it will try to match the Steam Nickname, to the Discord Nickname.  (1=Enabled, 0=Disabled)
-        - `discord_debug`: If enabled, you'll see lots of debug messages in the console. Very boring, but helped me develop the addon.  (1=Enabled, 0=Disabled)
-        - `discord_language`: Set the language that players see from the addon. (see: [/lua/locale](https://github.com/manix84/discord_gmod_addon/tree/master/lua/locale) for available languages).
-5. You're all setup, so now, connect your Steam and Discord accounts:
+    - `discord_server_link`: This is the share link that is advertised on your gmod server.
+    - `discord_mute_round`: Do you want to mute the end of the round after death? (1=Yes, 0=No)
+    - `discord_mute_duration`: How long do you want the player to be muted after death, in seconds. Does nothing if `discord_mute_round` is set to `1`.
+    - `discord_auto_connect`: If enabled, when an unknown player connects, it will try to match the Steam Nickname, to the Discord Nickname.  (1=Enabled, 0=Disabled)
+4. You're all setup, so now, connect your Steam and Discord accounts:
     - Connect your Steam Account with the bot by typing `!discord YourDiscordTag` in the ingame chat (E.G `!discord Manix84`).
         - If you're having trouble, try your full discord name (E.G: `!discord Manix84#8429`). This should only be necessary if there are two or more people with the same name.
-    - So long as you're in correct **DISCORD_GUILD** and **DISCORD_CHANNEL**, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
+    - So long as you're in correct `DISCORD_GUILD` and `DISCORD_CHANNEL`, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
 
 ## Credits
 - Marcel Transier - The original creator of [ttt_discord_bot](https://github.com/marceltransier/ttt_discord_bot.git), from which this is based.
@@ -77,9 +81,9 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 
 ## Contributing
 1. Fork it (<https://github.com/manix84/discord_gmod_addon/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
+2. Create your feature branch (`git checkout -b feature/featureName`)
+3. Commit your changes (`git commit -am 'Add some featureName'`)
+4. Push to the branch (`git push origin feature/featureName`)
 5. Create a new Pull Request
 
 ### Adding a language
