@@ -1,6 +1,6 @@
 AddCSLuaFile('utils/logging.lua')
--- GMod Discord Bot Server settings module for ULX GUI -- by Manxi84
---   A settings module for modifying server settings for GMod Discord Bot.
+-- Discord Bot Server settings module for ULX GUI -- by Manxi84
+--   A settings module for modifying server settings for Discord Bot.
 
 local discord = xlib.makepanel{ parent=xgui.null }
 
