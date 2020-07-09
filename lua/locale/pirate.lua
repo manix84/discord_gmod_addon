@@ -1,4 +1,5 @@
-local english = {
+-- Talk like a pirate.
+local pirate = {
     MUTED_FOR_DURATION = "Ye be muted fer %s seconds.",
     MUTED_FOR_ROUND = "Ye be muted 'til th' round ends.",
     UNMUTED = "Ye be no longer muted.",
@@ -12,4 +13,4 @@ local english = {
     AUTOMATIC_MATCH = "Attemptin' t' match yer name, %s",
 }
 
-return english
+return pirate
