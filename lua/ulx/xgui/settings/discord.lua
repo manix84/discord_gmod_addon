@@ -5,8 +5,16 @@ AddCSLuaFile('utils/logging.lua')
 local discord = xlib.makepanel{ parent=xgui.null }
 
 ------------------------Discord Category Menu------------------------
-discord.panel = xlib.makepanel{ x=160, y=5, w=415, h=318, parent=discord }
-discord.catList = xlib.makelistview{ x=5, y=5, w=150, h=157, parent=discord }
+discord.panel = xlib.makepanel{
+  x=160, y=5,
+  w=415, h=318,
+  parent=discord
+}
+discord.catList = xlib.makelistview{
+  x=5, y=5,
+  w=150, h=157,
+  parent=discord
+}
 discord.catList:AddColumn( "Discord Settings" )
 discord.catList.Columns[1].DoClick = function() end
 
@@ -81,10 +89,23 @@ discord_settings_mute_options_List:SetSize( 393, 45 )
 discord_settings_mute_options_List:EnableVerticalScrollbar( false )
 discord_settings_mute_options_List:SetSpacing( 5 )
 
-local mute_round = xlib.makecheckbox{ x=0, y=0, label="Mute Until Round End", repconvar="rep_discord_mute_round", parent=discord_settings_mute_options_List }
+local mute_round = xlib.makecheckbox{
+  x=0, y=0,
+  label="Mute Until Round End",
+  repconvar="rep_discord_mute_round",
+  parent=discord_settings_mute_options_List
+}
 discord_settings_mute_options_List.AddItem(mute_round)
 
-local mute_duration = xlib.makeslider{ x=0, y=20, w=225, min=1, max=60, decimal=0, label="Mute Duration", repconvar="rep_discord_mute_duration", parent=discord_settings_mute_options_List }
+local mute_duration = xlib.makeslider{
+  x=0, y=20,
+  w=225,
+  min=1, max=60,
+  decimal=0,
+  label="Mute Duration",
+  repconvar="rep_discord_mute_duration",
+  parent=discord_settings_mute_options_List
+  }
 function mute_round.OnChange()
   mute_duration:SetDisabled( mute_round:GetChecked() )
 end
@@ -104,11 +125,33 @@ discord_settings_config_List:SetSize( 393, 115 )
 discord_settings_config_List:EnableVerticalScrollbar( false )
 discord_settings_config_List:SetSpacing( 5 )
 
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Message Prefix", parent=discord_settings_config_List })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Message Prefix", repconvar="rep_discord_name", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makelabel{
+  x=0, y=0,
+  w=140, h=20,
+  label="Message Prefix",
+  parent=discord_settings_config_List
+})
+discord_settings_config_List.AddItem(xlib.maketextbox{
+  x=150, y=0,
+  w=243, h=20,
+  label="Message Prefix",
+  repconvar="rep_discord_name",
+  parent=discord_settings_config_List
+})
 
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Discord Invitation Link", parent=discord_settings_config_List })
-discord_settings_config_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Discord Invitation Link", repconvar="rep_discord_server_link", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makelabel{
+  x=0, y=25,
+  w=140, h=20,
+  label="Discord Invitation Link",
+  parent=discord_settings_config_List
+})
+discord_settings_config_List.AddItem(xlib.maketextbox{
+  x=150, y=25,
+  w=243, h=20,
+  label="Discord Invitation Link",
+  repconvar="rep_discord_server_link",
+  parent=discord_settings_config_List
+})
 
 local selectedLanguageKey = ''
 
@@ -124,8 +167,17 @@ end
 get_selectedLanguage()
 
 -- Coming soon! The combobox isn't working yet, so i've disabled it for now.
-discord_settings_config_List.AddItem(xlib.makelabel{ x=0, y=50, h=20, label="Set Language", parent=discord_settings_config_List })
-local discord_settings_config_Language_combobox = xlib.makecombobox{ x=150, y=50, w=243, parent=discord_settings_config_List }
+discord_settings_config_List.AddItem(xlib.makelabel{
+  x=0, y=50,
+  h=20,
+  label="Set Language",
+  parent=discord_settings_config_List
+})
+local discord_settings_config_Language_combobox = xlib.makecombobox{
+  x=150, y=50,
+  w=243,
+  parent=discord_settings_config_List
+}
 discord_settings_config_Language_combobox:SetDisabled(true)
 discord_settings_config_List.AddItem(discord_settings_config_Language_combobox)
 discord_settings_config_Language_combobox.OnSelect = function( self, index, value, data )
@@ -158,9 +210,19 @@ local function get_availableLanguages()
 end
 get_availableLanguages()
 
-discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=75, label="Attempt to connect Discord and Steam Names automatically.", repconvar="rep_discord_auto_connect", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makecheckbox{
+  x=0, y=75,
+  label="Attempt to connect Discord and Steam Names automatically.",
+  repconvar="rep_discord_auto_connect",
+  parent=discord_settings_config_List
+})
 
-discord_settings_config_List.AddItem(xlib.makecheckbox{ x=0, y=95, label="Enable debug messages to console.", repconvar="rep_discord_debug", parent=discord_settings_config_List })
+discord_settings_config_List.AddItem(xlib.makecheckbox{
+  x=0, y=95,
+  label="Enable debug messages to console.",
+  repconvar="rep_discord_debug",
+  parent=discord_settings_config_List
+})
 
 --Bot Connection
 local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
@@ -174,11 +236,33 @@ discord_botConnection_List:SetSize( 393, 50 )
 discord_botConnection_List:EnableVerticalScrollbar( false )
 discord_botConnection_List:SetSpacing( 5 )
 
-discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=0, w=140, h=20, label="Node Bot Endpoint", parent=discord_botConnection_List })
-discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=0, w=243, h=20, label="Node Bot Endpoint", repconvar="rep_discord_endpoint", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.makelabel{
+  x=0, y=0,
+  w=140, h=20,
+  label="Node Bot Endpoint",
+  parent=discord_botConnection_List
+})
+discord_botConnection_List.AddItem(xlib.maketextbox{
+  x=150, y=0,
+  w=243, h=20,
+  label="Node Bot Endpoint",
+  repconvar="rep_discord_endpoint",
+  parent=discord_botConnection_List
+})
 
-discord_botConnection_List.AddItem(xlib.makelabel{ x=0, y=25, w=140, h=20, label="Node Bot API-Key", parent=discord_botConnection_List })
-discord_botConnection_List.AddItem(xlib.maketextbox{ x=150, y=25, w=243, h=20, label="Node Bot API-Key", repconvar="rep_discord_api_key", parent=discord_botConnection_List })
+discord_botConnection_List.AddItem(xlib.makelabel{
+  x=0, y=25,
+  w=140, h=20,
+  label="Node Bot API-Key",
+  parent=discord_botConnection_List
+})
+discord_botConnection_List.AddItem(xlib.maketextbox{
+  x=150, y=25,
+  w=243, h=20,
+  label="Node Bot API-Key",
+  repconvar="rep_discord_api_key",
+  parent=discord_botConnection_List
+})
 
 xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
 xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
@@ -201,20 +285,41 @@ discord_playerConnections_table_List:SetSize( 393, 290 )
 discord_playerConnections_table_List:EnableVerticalScrollbar( false )
 discord_playerConnections_table_List:SetSpacing( 5 )
 
-discord_playerConnections_table_List.listview = xlib.makelistview{ x=0, y=5, w=393, h=250, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.listview = xlib.makelistview{
+  x=0, y=5,
+  w=393, h=250,
+  parent=discord_playerConnections_table_List
+}
 discord_playerConnections_table_List.listview:AddColumn( "Name" )
 -- discord_playerConnections_table_List.listview.Columns[1]:set
 discord_playerConnections_table_List.listview:AddColumn( "Role" )
 discord_playerConnections_table_List.listview:AddColumn( "DiscordID" )
 
 
-discord_playerConnections_table_List.AddItem(xlib.makelabel{ x=0, y=265, w=80, h=20, label="Player DiscordID", parent=discord_playerConnections_table_List })
-local discord_playerConnections_DiscordID_textBox = xlib.maketextbox{ x=85, y=265, w=185, h=20, label="", disabled=true, parent=discord_playerConnections_table_List }
+discord_playerConnections_table_List.AddItem(xlib.makelabel{
+  x=0, y=265,
+  w=80, h=20,
+  label="Player DiscordID",
+  parent=discord_playerConnections_table_List
+})
+local discord_playerConnections_DiscordID_textBox = xlib.maketextbox{
+  x=85, y=265,
+  w=185, h=20,
+  label="",
+  disabled=true,
+  parent=discord_playerConnections_table_List
+}
 discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_textBox)
 
 local discord_playerConnections_table_List__Selected_SteamID = nil
 
-local discord_playerConnections_DiscordID_saveButton = xlib.makebutton{x=275, y=265, w=38, label="Save", disabled=true, parent=discord_playerConnections_table_List}
+local discord_playerConnections_DiscordID_saveButton = xlib.makebutton{
+  x=275, y=265,
+  w=38,
+  label="Save",
+  disabled=true,
+  parent=discord_playerConnections_table_List
+}
 
 local saveDiscordSteamConnection = function()
   local target_ply = player.GetBySteamID(discord_playerConnections_table_List__Selected_SteamID);
@@ -233,7 +338,12 @@ discord_playerConnections_DiscordID_saveButton.DoClick = saveDiscordSteamConnect
 discord_playerConnections_DiscordID_textBox.OnEnter = saveDiscordSteamConnection
 discord_playerConnections_table_List.AddItem(discord_playerConnections_DiscordID_saveButton)
 
-local discord_playerConnections_refreshButton = xlib.makebutton{x=317, y=265, w=75, label="Refresh List", parent=discord_playerConnections_table_List}
+local discord_playerConnections_refreshButton = xlib.makebutton{
+  x=317, y=265,
+  w=75,
+  label="Refresh List",
+  parent=discord_playerConnections_table_List
+}
 discord_playerConnections_refreshButton.DoClick = function()
   discord_playerConnections_table_List__Refresh()
   discord_playerConnections_table_List__Selected_SteamID = nil
