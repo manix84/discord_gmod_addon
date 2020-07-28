@@ -19,11 +19,11 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 - Mute a Player for the entire round, or simply for a few seconds.
 - Automatically connect players when they join your server. If a new player joins, they're on the Discord server already, and use the same name, they'll get connected without even prompting them.
 - Language support (currently for player messages):
-    - English (Default)
-    - German
-    - Turkish
-    - French
-    - Spanish
+    - English (english, Default)
+    - German (deutsche)
+    - Turkish (turkce)
+    - French (français)
+    - Spanish (español)
 - [ULX](https://steamcommunity.com/sharedfiles/filedetails/?id=557962280) Support:
     - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
     - Added Discord Settings
