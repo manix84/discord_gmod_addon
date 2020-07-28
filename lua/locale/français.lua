@@ -1,4 +1,4 @@
-local french = {
+local francais = {
     MUTED_FOR_DURATION = "Vous êtes en sourdine pendant %s seconde(s).",
     MUTED_FOR_ROUND = "Vous êtes mis en sourdine jusqu'à la fin de la partie.",
     UNMUTED = "Vous n'êtes plus en sourdine.",
@@ -12,4 +12,4 @@ local french = {
     AUTOMATIC_MATCH = "Tenter de faire correspondre votre nom, '%s' .",
 }
 
-return french
+return francais
