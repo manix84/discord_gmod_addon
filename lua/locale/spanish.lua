@@ -1,4 +1,4 @@
-local english = {
+local spanish = {
     MUTED_FOR_DURATION = "Estás silenciado por %s segundos.",
     MUTED_FOR_ROUND = "Estás silenciado hasta que acabe la ronda.",
     UNMUTED = "Ya no estás silenciado.",
@@ -12,4 +12,4 @@ local english = {
     AUTOMATIC_MATCH = "Intentando coincidir con tu nombre, '%s'",
 }
 
-return english
+return spanish
