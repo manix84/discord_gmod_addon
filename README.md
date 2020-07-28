@@ -21,7 +21,9 @@ This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord
 - Language support (currently for player messages):
     - English (Default)
     - German
+    - Turkish
     - French
+    - Spanish
 - [ULX](https://steamcommunity.com/sharedfiles/filedetails/?id=557962280) Support:
     - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
     - Added Discord Settings
