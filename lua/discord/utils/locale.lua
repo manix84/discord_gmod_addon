@@ -32,7 +32,7 @@ local function getTranslationsCache()
     print_debug('Caching language files:')
     local localesTable = getAvailableLanguages()
     for i, localeFileName in ipairs(localesTable) do
-      translationsCache[localeFileName] = include('locale/'..localeFileName..'.lua')
+      translationsCache[localeFileName] = include('discord/locale/'..localeFileName..'.lua')
       print_debug('  -', 'discord/locale/'..localeFileName..'.lua')
     end
   end
