@@ -20,6 +20,7 @@ if (CLIENT) then
   return
 end
 
+include('discord/utils/locale.lua')
 include('discord/utils/messaging.lua')
 include('discord/utils/logging.lua')
 include('discord/utils/discord_connection.lua')
