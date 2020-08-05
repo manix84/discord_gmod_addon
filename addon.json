@@ -4,13 +4,6 @@
 	"type"		:	"ServerContent",
     "tags"		:	[ "fun", "realism" ],
     "ignore"	: [
-        "*.psd",
-        "*.vcproj",
-        "*.svn*",
-        "*.vscode*",
-        "*.git*",
-        "images/*",
-        "*.md",
-        "LICENSE"
+        "*.psd", "*.vcproj", "*.svn*", "*.vscode*", "*.git*", "images/*", "*.md", "license"
     ]
 }
