@@ -20,10 +20,10 @@ if (CLIENT) then
   return
 end
 
-include('utils/messaging.lua')
-include('utils/logging.lua')
-include('utils/discord_connection.lua')
-include('utils/http.lua')
+include('discord/utils/messaging.lua')
+include('discord/utils/logging.lua')
+include('discord/utils/discord_connection.lua')
+include('discord/utils/http.lua')
 
 util.AddNetworkString("drawMute")
 util.AddNetworkString("connectDiscordID")

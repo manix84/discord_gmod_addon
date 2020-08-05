@@ -5,7 +5,7 @@ CreateConVar("discord_language", "english", 1, "Set the language you want user p
 local availableLanguages = {}
 function getAvailableLanguages()
   if (table.Count(availableLanguages) <= 0) then
-    local foundLocaleFiles, _ = file.Find('locale/*.lua', 'lsv')
+    local foundLocaleFiles, _ = file.Find('discord/locale/*.lua', 'lsv')
     for i, localeFileName in ipairs(foundLocaleFiles) do
       table.insert(availableLanguages, string.Replace(localeFileName, '.lua', ''))
     end
@@ -33,7 +33,7 @@ local function getTranslationsCache()
     local localesTable = getAvailableLanguages()
     for i, localeFileName in ipairs(localesTable) do
       translationsCache[localeFileName] = include('locale/'..localeFileName..'.lua')
-      print_debug('  -', 'locale/'..localeFileName..'.lua')
+      print_debug('  -', 'discord/locale/'..localeFileName..'.lua')
     end
   end
   return translationsCache
