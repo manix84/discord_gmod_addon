@@ -3,12 +3,14 @@ function httpFetch(req, params, callback, tries)
   httpsAdress = GetConVar("discord_endpoint"):GetString()
   http.Fetch(httpsAdress..'/'..req,
     function(res)
-      --print(res)
+      if (util.JSONToTable(res).errorMsg) then
+        print("["..GetConVar("discord_name"):GetString().."][Error] " .. util.JSONToTable(res).errorMsg)
+      end
       callback(util.JSONToTable(res))
     end,
     function(err)
-      print("Request to bot failed. Is the bot running?")
-      print("Err: "..err)
+      print("["..GetConVar("discord_name"):GetString().."] Request to bot failed to respond. Is the bot running? Or is the URL correct?")
+      print("["..GetConVar("discord_name"):GetString().."][Error] " .. err)
       if (!tries) then tries = defaultTries end
       if (tries != 0) then httpFetch(req, params, callback, tries-1) end
     end, {
