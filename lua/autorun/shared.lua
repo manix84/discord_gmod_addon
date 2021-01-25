@@ -68,8 +68,8 @@ function mutePlayer(target_ply, duration)
             drawMuteIcon(target_ply, true)
             mutedPlayerTable[target_ply] = true
           end
-          if (res.error) then
-            announceMessage('ERROR_MESSAGE', res.err)
+          if (res.errorMsg) then
+            announceMessage('ERROR_MESSAGE', res.errorMsg)
           end
         end
       end)
@@ -89,8 +89,8 @@ function unmutePlayer(target_ply)
             drawMuteIcon(target_ply, false)
             mutedPlayerTable[target_ply] = false
           end
-          if (res.error) then
-            print("Error: " .. res.err)
+          if (res.errorMsg) then
+            announceMessage('ERROR_MESSAGE', res.errorMsg)
           end
         end)
       end
