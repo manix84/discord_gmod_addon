@@ -263,13 +263,20 @@ discord_botConnection_List.AddItem(xlib.maketextbox{
   repconvar="rep_discord_api_key",
   parent=discord_botConnection_List
 })
-local discord_botConnection_testButton_result = xlib.makelabel{
-  x=285, y=50,
+local discord_botConnection_testButton_host_result = xlib.makelabel{
+  x=135, y=0,
   w=20, h=20,
   label="",
   parent=discord_botConnection_List
 }
-discord_botConnection_List.AddItem(discord_botConnection_testButton_result)
+local discord_botConnection_testButton_api_key_result = xlib.makelabel{
+  x=135, y=25,
+  w=20, h=20,
+  label="",
+  parent=discord_botConnection_List
+}
+discord_botConnection_List.AddItem(discord_botConnection_testButton_host_result)
+discord_botConnection_List.AddItem(discord_botConnection_testButton_api_key_result)
 local discord_botConnection_testButton = xlib.makebutton{
   x=303, y=50,
   w=90,
@@ -281,8 +288,9 @@ discord_botConnection_testButton.DoClick = function()
 end
 discord_botConnection_List.AddItem(discord_botConnection_testButton)
 
-timer.Create("clearTestResponse", 3.0, 0, function()
-  discord_botConnection_testButton_result:SetText("")
+timer.Create("clearTestResponse", 5.0, 0, function()
+  discord_botConnection_testButton_host_result:SetText("")
+  discord_botConnection_testButton_api_key_result:SetText("")
 end)
 
 net.Receive("discordTestConnection", function()
@@ -294,12 +302,21 @@ net.Receive("discordTestConnection", function()
   timer.Stop("clearTestResponse")
   timer.Start("clearTestResponse")
 
-  if (connectionTestResponseTable['success']) then
-    discord_botConnection_testButton_result:SetTextColor( Color( 0, 200, 0) )
-    discord_botConnection_testButton_result:SetText("✔")
-  else
-    discord_botConnection_testButton_result:SetTextColor( Color( 255, 0, 0) )
-    discord_botConnection_testButton_result:SetText("✘")
+  if (connectionTestResponseTable["success"]) then
+    discord_botConnection_testButton_host_result:SetTextColor( Color( 0, 200, 0) )
+    discord_botConnection_testButton_host_result:SetText("✔")
+    discord_botConnection_testButton_api_key_result:SetTextColor( Color( 0, 200, 0) )
+    discord_botConnection_testButton_api_key_result:SetText("✔")
+  elseif (connectionTestResponseTable["errorId"] == "HOST_MISSCONFIGURED") then
+    discord_botConnection_testButton_host_result:SetTextColor( Color( 255, 0, 0) )
+    discord_botConnection_testButton_host_result:SetText("✘")
+    -- discord_botConnection_testButton_api_key_result:SetTextColor( Color( 0, 0, 0) )
+    -- discord_botConnection_testButton_api_key_result:SetText("?")
+  elseif (connectionTestResponseTable["errorId"] == "AUTHORIZATION_MISSMATCH") then
+    discord_botConnection_testButton_host_result:SetTextColor( Color( 0, 200, 0) )
+    discord_botConnection_testButton_host_result:SetText("✔")
+    discord_botConnection_testButton_api_key_result:SetTextColor( Color( 255, 0, 0) )
+    discord_botConnection_testButton_api_key_result:SetText("✘")
   end
 end)
 function discord_botConnection_testButton__ExecuteTest()
