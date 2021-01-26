@@ -45,13 +45,13 @@ function discord.processModules()
     if module.mtype == "discord" and ( not module.access or LocalPlayer():query( module.access ) ) then
       local w,h = module.panel:GetSize()
       if w == h and h == 0 then module.panel:SetSize( 275, 322 ) end
-      
+
       if module.panel.scroll then --For DListLayouts
         module.panel.scroll.panel = module.panel
         module.panel = module.panel.scroll
       end --if
       module.panel:SetParent( discord.panel )
-      
+
       local line = discord.catList:AddLine( module.name, i )
       if ( module.panel == discord.curPanel ) then
         discord.curPanel = nil
@@ -78,7 +78,7 @@ xlib.makelabel{
 }
 
 --Mute Options
-local discord_settings_mute_options_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
+local discord_settings_mute_options_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel )
 discord_settings_mute_options_Category:SetSize( 393, 45 )
 discord_settings_mute_options_Category:SetExpanded( true )
 discord_settings_mute_options_Category:SetLabel( "Mute Options" )
@@ -114,9 +114,9 @@ mute_duration:SetDisabled( mute_round:GetChecked() )
 discord_settings_mute_options_List.AddItem(mute_duration)
 
 --Config
-local discord_settings_config_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
+local discord_settings_config_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel )
 discord_settings_config_Category:SetSize( 393, 115 )
-discord_settings_config_Category:SetExpanded( false )
+discord_settings_config_Category:SetExpanded( true )
 discord_settings_config_Category:SetLabel( "Config" )
 
 local discord_settings_config_List = vgui.Create( "DPanelList", discord_settings_config_Category )
@@ -225,14 +225,14 @@ discord_settings_config_List.AddItem(xlib.makecheckbox{
 })
 
 --Bot Connection
-local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel ) 
+local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel )
 discord_botConnection_Category:SetSize( 393, 25 )
 discord_botConnection_Category:SetExpanded( false )
 discord_botConnection_Category:SetLabel( "Bot Connection (Don't Open On Stream!)" )
 
 local discord_botConnection_List = vgui.Create( "DPanelList", discord_botConnection_Category )
 discord_botConnection_List:SetPos( 10, 25 )
-discord_botConnection_List:SetSize( 393, 50 )
+discord_botConnection_List:SetSize( 393, 90 )
 discord_botConnection_List:EnableVerticalScrollbar( false )
 discord_botConnection_List:SetSpacing( 5 )
 
@@ -263,6 +263,49 @@ discord_botConnection_List.AddItem(xlib.maketextbox{
   repconvar="rep_discord_api_key",
   parent=discord_botConnection_List
 })
+local discord_botConnection_testButton_result = xlib.makelabel{
+  x=285, y=50,
+  w=20, h=20,
+  label="",
+  parent=discord_botConnection_List
+}
+discord_botConnection_List.AddItem(discord_botConnection_testButton_result)
+local discord_botConnection_testButton = xlib.makebutton{
+  x=303, y=50,
+  w=90,
+  label="Test Connection",
+  parent=discord_botConnection_List
+}
+discord_botConnection_testButton.DoClick = function()
+  discord_botConnection_testButton__ExecuteTest()
+end
+discord_botConnection_List.AddItem(discord_botConnection_testButton)
+
+timer.Create("clearTestResponse", 3.0, 0, function()
+  discord_botConnection_testButton_result:SetText("")
+end)
+
+net.Receive("discordTestConnection", function()
+  local len = net.ReadUInt(32)
+  local compressedConnectionTestResponse = net.ReadData(len)
+  local connectionTestResponseJSON = util.Decompress(compressedConnectionTestResponse)
+  local connectionTestResponseTable = util.JSONToTable(connectionTestResponseJSON)
+
+  timer.Stop("clearTestResponse")
+  timer.Start("clearTestResponse")
+
+  if (connectionTestResponseTable['success']) then
+    discord_botConnection_testButton_result:SetTextColor( Color( 0, 200, 0) )
+    discord_botConnection_testButton_result:SetText("✔")
+  else
+    discord_botConnection_testButton_result:SetTextColor( Color( 255, 0, 0) )
+    discord_botConnection_testButton_result:SetText("✘")
+  end
+end)
+function discord_botConnection_testButton__ExecuteTest()
+  net.Start("request_discordTestConnection")
+  net.SendToServer()
+end
 
 xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
 xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
@@ -274,7 +317,7 @@ local discord_playerConnections_panel = xlib.makelistlayout{ w=415, h=318, paren
 local steamIDToDiscordIDConnectionTable = {}
 
 --Player Connection
-local discord_playerConnections_table_Category = vgui.Create( "DCollapsibleCategory", discord_playerConnections_panel ) 
+local discord_playerConnections_table_Category = vgui.Create( "DCollapsibleCategory", discord_playerConnections_panel )
 discord_playerConnections_table_Category:SetSize( 393, 45 )
 discord_playerConnections_table_Category:SetExpanded( true )
 discord_playerConnections_table_Category:SetLabel( "Player Connections" )

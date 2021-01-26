@@ -30,6 +30,8 @@ util.AddNetworkString("drawMute")
 util.AddNetworkString("connectDiscordID")
 util.AddNetworkString("discordPlayerTable")
 util.AddNetworkString("request_discordPlayerTable")
+util.AddNetworkString("discordTestConnection")
+util.AddNetworkString("request_discordTestConnection")
 
 CreateConVar("discord_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
 CreateConVar("discord_api_key", "", 1, "Sets the node bot api-key.")
@@ -121,8 +123,26 @@ function commonRoundState()
 end
 
 function joinMessage(target_ply)
-  playerMessage('JOIN_DISCORD_PROMPT', target_ply, GetConVar("discord_server_link"):GetString())
-  playerMessage('CONNECTION_INSTRUCTIONS', target_ply)
+  playerMessage("JOIN_DISCORD_PROMPT", target_ply, GetConVar("discord_server_link"):GetString())
+  playerMessage("CONNECTION_INSTRUCTIONS", target_ply)
+end
+
+function testConnection(callback)
+  timer.Create("testConnectionTimeout", 2.0, 0, function()
+    local responseTable = {}
+    responseTable['success'] = false
+    responseTable['error'] = "host connection failure"
+    responseTable['errorMsg'] = "host connection failure"
+    responseTable['errorId'] = "HOST_MISSCONFIGURED"
+
+    callback(responseTable)
+    timer.Remove("testConnectionTimeout")
+  end)
+  timer.Start("testConnectionTimeout")
+  httpFetch("sync", {}, function(res)
+    timer.Remove("testConnectionTimeout")
+    callback(res)
+  end)
 end
 
 net.Receive("connectDiscordID", function( len, calling_ply )
@@ -147,6 +167,22 @@ net.Receive("request_discordPlayerTable", function( len, calling_ply )
   net.WriteUInt(#compressedConnections, 32)
   net.WriteData(compressedConnections, #compressedConnections)
   net.Send(calling_ply)
+end)
+
+net.Receive("request_discordTestConnection", function( len, calling_ply )
+  if !calling_ply:IsSuperAdmin() then
+    return
+  end
+
+  testConnection(function (res)
+    local connectionsJSON = util.TableToJSON(res)
+    local compressedConnections = util.Compress(connectionsJSON)
+
+    net.Start("discordTestConnection")
+    net.WriteUInt(#compressedConnections, 32)
+    net.WriteData(compressedConnections, #compressedConnections)
+    net.Send(calling_ply)
+  end)
 end)
 
 hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)
