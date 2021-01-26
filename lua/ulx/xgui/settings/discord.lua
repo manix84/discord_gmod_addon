@@ -388,4 +388,3 @@ discord_playerConnections_table_List__Refresh()
 
 xgui.hookEvent( "onProcessModules", nil, discord_playerConnections_panel.processModules )
 xgui.addSubModule( "Player Connections", discord_playerConnections_panel, nil, "discord" )
-
