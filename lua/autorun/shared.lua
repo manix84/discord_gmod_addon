@@ -32,6 +32,8 @@ util.AddNetworkString("discordPlayerTable")
 util.AddNetworkString("request_discordPlayerTable")
 util.AddNetworkString("discordTestConnection")
 util.AddNetworkString("request_discordTestConnection")
+util.AddNetworkString("request_appVersions")
+util.AddNetworkString("appVersions")
 
 CreateConVar("discord_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
 CreateConVar("discord_api_key", "", 1, "Sets the node bot api-key.")
@@ -181,6 +183,26 @@ net.Receive("request_discordTestConnection", function( len, calling_ply )
     net.Start("discordTestConnection")
     net.WriteUInt(#compressedConnections, 32)
     net.WriteData(compressedConnections, #compressedConnections)
+    net.Send(calling_ply)
+  end)
+end)
+
+net.Receive("request_appVersions", function( len, calling_ply )
+  if !calling_ply:IsSuperAdmin() then
+    return
+  end
+
+  testConnection(function (res)
+    local versionsTable = {}
+    versionsTable["addon_version"] = "1.7"
+    versionsTable["bot_version"] = res["version"]
+
+    local versionsJSON = util.TableToJSON(versionsTable)
+    local compressedVersionsJSON = util.Compress(versionsJSON)
+
+    net.Start("appVersions")
+    net.WriteUInt(#compressedVersionsJSON, 32)
+    net.WriteData(compressedVersionsJSON, #compressedVersionsJSON)
     net.Send(calling_ply)
   end)
 end)

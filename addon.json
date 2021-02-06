@@ -1,9 +1,7 @@
-  
 {
-	"title"		:	"Discord Muter",
-	"type"		:	"ServerContent",
-    "tags"		:	[ "fun", "realism" ],
-    "ignore"	: [
-        "*.psd", "*.vcproj", "*.svn*", "*.vscode*", "*.git*", "images/*", "*.md", "license"
-    ]
+  "version": "1.7",
+  "title": "Discord Muter",
+  "type": "ServerContent",
+  "tags": [ "fun", "realism" ],
+  "ignore": [ "*.psd", "*.vcproj", "*.svn*", "*.vscode*", "*.git*", "images/*", "*.md", "license" ]
 }

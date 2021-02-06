@@ -19,5 +19,9 @@ local function init()
   util.AddNetworkString("request_discordTestConnection")
   util.AddNetworkString("discordPlayerTable")
   util.AddNetworkString("request_discordPlayerTable")
+  util.AddNetworkString("appVersions")
+  util.AddNetworkString("request_appVersions")
+
+  resource.AddSingleFile("materials/icon128/discord_muter.png")
 end
 xgui.addSVModule( "discord", init )

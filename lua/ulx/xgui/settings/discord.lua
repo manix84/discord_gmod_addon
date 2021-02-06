@@ -448,3 +448,88 @@ discord_playerConnections_table_List__Refresh()
 
 xgui.hookEvent( "onProcessModules", nil, discord_playerConnections_panel.processModules )
 xgui.addSubModule( "Player Connections", discord_playerConnections_panel, nil, "discord" )
+
+
+-------------------------About Module-----------------------
+local discord_about_panel = xlib.makelistlayout{
+  w = 415, h = 318,
+  parent = discord.panel
+}
+
+--About
+local discord_about_table_Category = vgui.Create( "DCollapsibleCategory", discord_about_panel )
+discord_about_table_Category:SetSize( 393, 45 )
+discord_about_table_Category:SetExpanded( true )
+discord_about_table_Category:SetLabel( "About" )
+
+-- Discord Muter Icon
+local discord_about_table_about_icon = vgui.Create("DImage", discord_about_table_Category) -- Add image to Category
+discord_about_table_about_icon:SetPos(133, 25) -- Move it into Category
+discord_about_table_about_icon:SetSize(128, 128) -- Size it to 128x128
+
+-- Set material relative to "garrysmod/materials/"
+discord_about_table_about_icon:SetImage("icon128/discord_muter.png")
+
+xlib.makelabel{
+  x = 145, y = 153,
+  w = 128, h = 20,
+  label = "Discord Muter",
+  font = "DefaultLarge",
+  parent = discord_about_table_Category
+}
+local addon_version = xlib.makelabel{
+  x = 227, y = 153,
+  w = 40, h = 20,
+  label = "...",
+  font = "DefaultLarge",
+  parent = discord_about_table_Category
+}
+xlib.makelabel{
+  x = 137, y = 170,
+  w = 128, h = 20,
+  label = "by Rob \"Manix84\" Taylor",
+  parent = discord_about_table_Category
+}
+xlib.makelabel{
+  x = 152, y = 185,
+  w = 100, h = 20,
+  label = "Bot Version:",
+  parent = discord_about_table_Category
+}
+local bot_version = xlib.makelabel{
+  x = 211, y = 185,
+  w = 40, h = 20,
+  label = "...",
+  parent = discord_about_table_Category
+}
+-- xlib.makelabel{
+--   x = 5, y = 210,
+--   w = 100, h = 20,
+--   label = "Addon Source Code",
+--   parent = discord_about_table_Category
+-- }
+
+-- xlib.makelabel{
+--   x = 7, y = 225,
+--   w = 100, h = 20,
+--   label = "Bot Source Code",
+--   parent = discord_about_table_Category
+-- }
+
+net.Receive("appVersions", function()
+  local len = net.ReadUInt(32)
+  local compressedAppVersionsResponse = net.ReadData(len)
+  local appVersionsResponseJSON = util.Decompress(compressedAppVersionsResponse)
+  local appVersionsResponseTable = util.JSONToTable(appVersionsResponseJSON)
+
+  addon_version:SetText('v' .. appVersionsResponseTable["addon_version"])
+  bot_version:SetText('v' .. appVersionsResponseTable["bot_version"])
+end)
+function get_discord_app_versions()
+  net.Start("request_appVersions")
+  net.SendToServer()
+end
+get_discord_app_versions()
+
+xgui.hookEvent( "onProcessModules", nil, discord_about_panel.processModules )
+xgui.addSubModule( "About", discord_about_panel, nil, "discord" )
