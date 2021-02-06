@@ -1,13 +1,13 @@
-include('./logging.lua')
+include("./logging.lua")
 
 CreateConVar("discord_language", "english", 1, "Set the language you want user prompts to be in.")
 
 local availableLanguages = {}
 function getAvailableLanguages()
   if (table.Count(availableLanguages) <= 0) then
-    local foundLocaleFiles, _ = file.Find('discord/locale/*.lua', 'lsv')
+    local foundLocaleFiles, _ = file.Find("discord/locale/*.lua", "lsv")
     for i, localeFileName in ipairs(foundLocaleFiles) do
-      table.insert(availableLanguages, string.Replace(localeFileName, '.lua', ''))
+      table.insert(availableLanguages, string.Replace(localeFileName, ".lua", ""))
     end
   end
   return availableLanguages
@@ -15,7 +15,7 @@ end
 getAvailableLanguages()
 print_debug("Available languages: ", util.TableToJSON(availableLanguages))
 
-local selectedLanguage = 'english'
+local selectedLanguage = "english"
 function getSelectedLanguage()
   local selectedLanguage = GetConVar("discord_language"):GetString()
   if (table.HasValue(getAvailableLanguages(), selectedLanguage)) then
@@ -29,11 +29,11 @@ print_debug("Selected language: ", selectedLanguage)
 local translationsCache = {}
 local function getTranslationsCache()
   if (table.Count(translationsCache) <= 0) then
-    print_debug('Caching language files:')
+    print_debug("Caching language files:")
     local localesTable = getAvailableLanguages()
     for i, localeFileName in ipairs(localesTable) do
-      translationsCache[localeFileName] = include('discord/locale/'..localeFileName..'.lua')
-      print_debug('  -', 'discord/locale/'..localeFileName..'.lua')
+      translationsCache[localeFileName] = include("discord/locale/" .. localeFileName .. ".lua")
+      print_debug("  -", "discord/locale/" .. localeFileName .. ".lua")
     end
   end
   return translationsCache

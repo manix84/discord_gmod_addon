@@ -4,6 +4,6 @@ local enableDebugLogging = GetConVar("discord_debug"):GetBool()
 
 function print_debug(...)
   if (enableDebugLogging) then
-    print('[Discord]', ...)
+    print("[Discord]", ...)
   end
 end
