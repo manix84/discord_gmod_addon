@@ -186,7 +186,7 @@ net.Receive("request_discordTestConnection", function( len, calling_ply )
 end)
 
 net.Receive("request_botVersion", function( len, calling_ply )
-  if !calling_ply:IsSuperAdmin() then
+  if !calling_ply:IsAdmin() then
     return
   end
 
@@ -202,11 +202,11 @@ net.Receive("request_botVersion", function( len, calling_ply )
 end)
 
 net.Receive("request_addonVersion", function( len, calling_ply )
-  if !calling_ply:IsSuperAdmin() then
+  if !calling_ply:IsAdmin() then
     return
   end
 
-  local addonVersion = 1.7
+  local addonVersion = "1.7.0"
   local compressedAddonVersion = util.Compress(addonVersion)
 
   net.Start("addonVersion")

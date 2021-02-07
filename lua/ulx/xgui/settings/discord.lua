@@ -15,7 +15,7 @@ discord.catList = xlib.makelistview{
   w = 150, h = 157,
   parent = discord
 }
-discord.catList:AddColumn( "Discord Settings" )
+discord.catList:AddColumn( "Discord Muter Settings" )
 discord.catList.Columns[1].DoClick = function() end
 
 discord.catList.OnRowSelected = function( self, LineID, Line )
@@ -65,7 +65,7 @@ end
 discord.processModules()
 
 xgui.hookEvent( "onProcessModules", nil, discord.processModules )
-xgui.addSettingModule( "Discord", discord, "icon16/phone_sound.png" )
+xgui.addSettingModule( "Discord Muter", discord, "icon16/discord_muter.png" )
 
 ------------------------Settings Module-----------------------
 local discord_settings_panel = xlib.makelistlayout{ w = 415, h = 318, parent = discord.panel }
@@ -133,7 +133,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 discord_settings_config_List.AddItem(xlib.maketextbox{
   x = 150, y = 0,
-  w = 233, h = 20,
+  w = 235, h = 20,
   label = "Message Prefix",
   repconvar = "rep_discord_name",
   parent = discord_settings_config_List
@@ -147,7 +147,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 discord_settings_config_List.AddItem(xlib.maketextbox{
   x = 150, y = 25,
-  w = 233, h = 20,
+  w = 235, h = 20,
   label = "Discord Invitation Link",
   repconvar = "rep_discord_server_link",
   parent = discord_settings_config_List
@@ -175,7 +175,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 local discord_settings_config_Language_combobox = xlib.makecombobox{
   x = 150, y = 50,
-  w = 233,
+  w = 235,
   parent = discord_settings_config_List
 }
 discord_settings_config_Language_combobox:SetDisabled(true)
@@ -244,7 +244,7 @@ discord_botConnection_List.AddItem(xlib.makelabel{
 })
 discord_botConnection_List.AddItem(xlib.maketextbox{
   x = 150, y = 0,
-  w = 233, h = 20,
+  w = 235, h = 20,
   label = "Node Bot Endpoint",
   repconvar = "rep_discord_endpoint",
   parent = discord_botConnection_List
@@ -258,7 +258,7 @@ discord_botConnection_List.AddItem(xlib.makelabel{
 })
 discord_botConnection_List.AddItem(xlib.maketextbox{
   x = 150, y = 25,
-  w = 233, h = 20,
+  w = 235, h = 20,
   label = "Node Bot API-Key",
   repconvar = "rep_discord_api_key",
   parent = discord_botConnection_List
@@ -278,7 +278,7 @@ local discord_botConnection_testButton_api_key_result = xlib.makelabel{
 discord_botConnection_List.AddItem(discord_botConnection_testButton_host_result)
 discord_botConnection_List.AddItem(discord_botConnection_testButton_api_key_result)
 local discord_botConnection_testButton = xlib.makebutton{
-  x = 293, y = 50,
+  x = 295, y = 50,
   w = 90,
   label = "Test Connection",
   parent = discord_botConnection_List
@@ -470,65 +470,40 @@ discord_about_table_about_icon:SetSize(128, 128) -- Size it to 128x128
 -- Set material relative to "garrysmod/materials/"
 discord_about_table_about_icon:SetImage("icon128/discord_muter.png")
 
-xlib.makelabel{
-  x = 145, y = 153,
-  w = 128, h = 20,
-  label = "Discord Muter",
-  font = "DefaultLarge",
-  parent = discord_about_table_Category
-}
 local addon_version = xlib.makelabel{
-  x = 227, y = 153,
-  w = 40, h = 20,
-  label = "...",
-  font = "DefaultLarge",
-  parent = discord_about_table_Category
-}
-xlib.makelabel{
-  x = 137, y = 170,
+  x = 138, y = 153,
   w = 128, h = 20,
-  label = "by Rob \"Manix84\" Taylor",
-  parent = discord_about_table_Category
-}
-xlib.makelabel{
-  x = 152, y = 185,
-  w = 100, h = 20,
-  label = "Bot Version:",
+  label = "Discord Muter v?.?.?",
+  font = "DefaultLarge",
   parent = discord_about_table_Category
 }
 local bot_version = xlib.makelabel{
-  x = 211, y = 185,
-  w = 40, h = 20,
-  label = "...",
+  x = 155, y = 170,
+  w = 100, h = 20,
+  label = "Node Bot v?.?.?",
   parent = discord_about_table_Category
 }
--- xlib.makelabel{
---   x = 5, y = 210,
---   w = 100, h = 20,
---   label = "Addon Source Code",
---   parent = discord_about_table_Category
--- }
-
--- xlib.makelabel{
---   x = 7, y = 225,
---   w = 100, h = 20,
---   label = "Bot Source Code",
---   parent = discord_about_table_Category
--- }
+xlib.makelabel{
+  x = 134, y = 185,
+  w = 128, h = 20,
+  label = "by Rob \"Manix84\" Taylor",
+  font = "DefaultSmall",
+  parent = discord_about_table_Category
+}
 
 net.Receive("addonVersion", function()
   local len = net.ReadUInt(32)
   local compressedAddonVersion = net.ReadData(len)
   local addonVersion = util.Decompress(compressedAddonVersion)
 
-  addon_version:SetText('v' .. addonVersion)
+  addon_version:SetText("Discord Muter v" .. addonVersion)
 end)
 net.Receive("botVersion", function()
   local len = net.ReadUInt(32)
   local compressedBotVersion = net.ReadData(len)
   local botVersion = util.Decompress(compressedBotVersion)
 
-  bot_version:SetText('v' .. botVersion)
+  bot_version:SetText("Node Bot v" .. botVersion)
 end)
 function get_discord_app_versions()
   net.Start("request_addonVersion")

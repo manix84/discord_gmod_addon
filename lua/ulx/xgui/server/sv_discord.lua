@@ -25,5 +25,6 @@ local function init()
   util.AddNetworkString("request_botVersion")
 
   resource.AddSingleFile("materials/icon128/discord_muter.png")
+  resource.AddSingleFile("materials/icon16/discord_muter.png")
 end
 xgui.addSVModule( "discord", init )
