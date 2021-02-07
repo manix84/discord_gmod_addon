@@ -516,17 +516,24 @@ local bot_version = xlib.makelabel{
 --   parent = discord_about_table_Category
 -- }
 
-net.Receive("appVersions", function()
+net.Receive("addonVersion", function()
   local len = net.ReadUInt(32)
-  local compressedAppVersionsResponse = net.ReadData(len)
-  local appVersionsResponseJSON = util.Decompress(compressedAppVersionsResponse)
-  local appVersionsResponseTable = util.JSONToTable(appVersionsResponseJSON)
+  local compressedAddonVersion = net.ReadData(len)
+  local addonVersion = util.Decompress(compressedAddonVersion)
 
-  addon_version:SetText('v' .. appVersionsResponseTable["addon_version"])
-  bot_version:SetText('v' .. appVersionsResponseTable["bot_version"])
+  addon_version:SetText('v' .. addonVersion)
+end)
+net.Receive("botVersion", function()
+  local len = net.ReadUInt(32)
+  local compressedBotVersion = net.ReadData(len)
+  local botVersion = util.Decompress(compressedBotVersion)
+
+  bot_version:SetText('v' .. botVersion)
 end)
 function get_discord_app_versions()
-  net.Start("request_appVersions")
+  net.Start("request_addonVersion")
+  net.SendToServer()
+  net.Start("request_botVersion")
   net.SendToServer()
 end
 get_discord_app_versions()

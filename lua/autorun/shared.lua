@@ -32,8 +32,10 @@ util.AddNetworkString("discordPlayerTable")
 util.AddNetworkString("request_discordPlayerTable")
 util.AddNetworkString("discordTestConnection")
 util.AddNetworkString("request_discordTestConnection")
-util.AddNetworkString("request_appVersions")
-util.AddNetworkString("appVersions")
+util.AddNetworkString("addonVersion")
+util.AddNetworkString("request_addonVersion")
+util.AddNetworkString("botVersion")
+util.AddNetworkString("request_botVersion")
 
 CreateConVar("discord_endpoint", "http://localhost:37405", 1, "Sets the node bot endpoint.")
 CreateConVar("discord_api_key", "", 1, "Sets the node bot api-key.")
@@ -125,8 +127,8 @@ function joinMessage(target_ply)
   playerMessage("CONNECTION_INSTRUCTIONS", target_ply)
 end
 
-function testConnection(callback)
-  timer.Create("testConnectionTimeout", 2.0, 0, function()
+function botSync(callback)
+  timer.Create("botSyncTimeout", 2.0, 0, function()
     local responseTable = {}
     responseTable["success"] = false
     responseTable["error"] = "host connection failure"
@@ -134,11 +136,11 @@ function testConnection(callback)
     responseTable["errorId"] = "HOST_MISSCONFIGURED"
 
     callback(responseTable)
-    timer.Remove("testConnectionTimeout")
+    timer.Remove("botSyncTimeout")
   end)
-  timer.Start("testConnectionTimeout")
+  timer.Start("botSyncTimeout")
   httpFetch("sync", {}, function(res)
-    timer.Remove("testConnectionTimeout")
+    timer.Remove("botSyncTimeout")
     callback(res)
   end)
 end
@@ -172,7 +174,7 @@ net.Receive("request_discordTestConnection", function( len, calling_ply )
     return
   end
 
-  testConnection(function (res)
+  botSync(function (res)
     local connectionsJSON = util.TableToJSON(res)
     local compressedConnections = util.Compress(connectionsJSON)
 
@@ -183,24 +185,34 @@ net.Receive("request_discordTestConnection", function( len, calling_ply )
   end)
 end)
 
-net.Receive("request_appVersions", function( len, calling_ply )
+net.Receive("request_botVersion", function( len, calling_ply )
   if !calling_ply:IsSuperAdmin() then
     return
   end
 
-  testConnection(function (res)
-    local versionsTable = {}
-    versionsTable["addon_version"] = "1.7"
-    versionsTable["bot_version"] = res["version"]
+  botSync(function (res)
+    local botVersion = res["version"]
+    local compressedBotVersion = util.Compress(botVersion)
 
-    local versionsJSON = util.TableToJSON(versionsTable)
-    local compressedVersionsJSON = util.Compress(versionsJSON)
-
-    net.Start("appVersions")
-    net.WriteUInt(#compressedVersionsJSON, 32)
-    net.WriteData(compressedVersionsJSON, #compressedVersionsJSON)
+    net.Start("botVersion")
+    net.WriteUInt(#compressedBotVersion, 32)
+    net.WriteData(compressedBotVersion, #compressedBotVersion)
     net.Send(calling_ply)
   end)
+end)
+
+net.Receive("request_addonVersion", function( len, calling_ply )
+  if !calling_ply:IsSuperAdmin() then
+    return
+  end
+
+  local addonVersion = 1.7
+  local compressedAddonVersion = util.Compress(addonVersion)
+
+  net.Start("addonVersion")
+  net.WriteUInt(#compressedAddonVersion, 32)
+  net.WriteData(compressedAddonVersion, #compressedAddonVersion)
+  net.Send(calling_ply)
 end)
 
 hook.Add("PlayerSay", "discord_PlayerSay", function(target_ply, msg)

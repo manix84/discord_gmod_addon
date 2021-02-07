@@ -19,8 +19,10 @@ local function init()
   util.AddNetworkString("request_discordTestConnection")
   util.AddNetworkString("discordPlayerTable")
   util.AddNetworkString("request_discordPlayerTable")
-  util.AddNetworkString("appVersions")
-  util.AddNetworkString("request_appVersions")
+  util.AddNetworkString("addonVersion")
+  util.AddNetworkString("request_addonVersion")
+  util.AddNetworkString("botVersion")
+  util.AddNetworkString("request_botVersion")
 
   resource.AddSingleFile("materials/icon128/discord_muter.png")
 end
