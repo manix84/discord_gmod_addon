@@ -224,8 +224,22 @@ discord_settings_config_List.AddItem(xlib.makecheckbox{
   parent = discord_settings_config_List
 })
 
+xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
+xgui.addSubModule( "Config", discord_settings_panel, nil, "discord" )
+
+
+------------------------Settings Module-----------------------
+local discord_bot_connection_panel = xlib.makelistlayout{ w = 415, h = 318, parent = discord.panel }
+
+xlib.makelabel{
+  x = 5, y = 0,
+  w = 425, h = 20,
+  label = "These settings do not save when the server changes maps, is restarted, or crashes.",
+  parent = discord_bot_connection_panel
+}
+
 --Bot Connection
-local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_settings_panel )
+local discord_botConnection_Category = vgui.Create( "DCollapsibleCategory", discord_bot_connection_panel )
 discord_botConnection_Category:SetSize( 393, 25 )
 discord_botConnection_Category:SetExpanded( false )
 discord_botConnection_Category:SetLabel( "Bot Connection (Don't Open On Stream!)" )
@@ -324,9 +338,8 @@ function discord_botConnection_testButton__ExecuteTest()
   net.SendToServer()
 end
 
-xgui.hookEvent( "onProcessModules", nil, discord_settings_panel.processModules )
-xgui.addSubModule( "Settings", discord_settings_panel, nil, "discord" )
-
+xgui.hookEvent( "onProcessModules", nil, discord_bot_connection_panel.processModules )
+xgui.addSubModule( "Bot Connection", discord_bot_connection_panel, nil, "discord" )
 
 -------------------------Players Module-----------------------
 local discord_playerConnections_panel = xlib.makelistlayout{ w = 415, h = 318, parent = discord.panel }
