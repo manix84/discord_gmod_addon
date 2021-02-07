@@ -133,7 +133,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 discord_settings_config_List.AddItem(xlib.maketextbox{
   x = 150, y = 0,
-  w = 243, h = 20,
+  w = 233, h = 20,
   label = "Message Prefix",
   repconvar = "rep_discord_name",
   parent = discord_settings_config_List
@@ -147,7 +147,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 discord_settings_config_List.AddItem(xlib.maketextbox{
   x = 150, y = 25,
-  w = 243, h = 20,
+  w = 233, h = 20,
   label = "Discord Invitation Link",
   repconvar = "rep_discord_server_link",
   parent = discord_settings_config_List
@@ -175,7 +175,7 @@ discord_settings_config_List.AddItem(xlib.makelabel{
 })
 local discord_settings_config_Language_combobox = xlib.makecombobox{
   x = 150, y = 50,
-  w = 243,
+  w = 233,
   parent = discord_settings_config_List
 }
 discord_settings_config_Language_combobox:SetDisabled(true)
@@ -244,7 +244,7 @@ discord_botConnection_List.AddItem(xlib.makelabel{
 })
 discord_botConnection_List.AddItem(xlib.maketextbox{
   x = 150, y = 0,
-  w = 243, h = 20,
+  w = 233, h = 20,
   label = "Node Bot Endpoint",
   repconvar = "rep_discord_endpoint",
   parent = discord_botConnection_List
@@ -258,7 +258,7 @@ discord_botConnection_List.AddItem(xlib.makelabel{
 })
 discord_botConnection_List.AddItem(xlib.maketextbox{
   x = 150, y = 25,
-  w = 243, h = 20,
+  w = 233, h = 20,
   label = "Node Bot API-Key",
   repconvar = "rep_discord_api_key",
   parent = discord_botConnection_List
@@ -278,7 +278,7 @@ local discord_botConnection_testButton_api_key_result = xlib.makelabel{
 discord_botConnection_List.AddItem(discord_botConnection_testButton_host_result)
 discord_botConnection_List.AddItem(discord_botConnection_testButton_api_key_result)
 local discord_botConnection_testButton = xlib.makebutton{
-  x = 303, y = 50,
+  x = 293, y = 50,
   w = 90,
   label = "Test Connection",
   parent = discord_botConnection_List
