@@ -22,7 +22,12 @@ discord.catList.OnRowSelected = function( self, LineID, Line )
   local nPanel = xgui.modules.submodule[Line:GetValue(2)].panel
   if nPanel ~=  discord.curPanel then
     nPanel:SetZPos( 0 )
-    xlib.addToAnimQueue( "pnlSlide", { panel = nPanel, startx = -435, starty = 0, endx = 0, endy = 0, setvisible = true } )
+    xlib.addToAnimQueue("pnlSlide", {
+      panel = nPanel,
+      startx = -435, starty = 0,
+      endx = 0, endy = 0,
+      setvisible = true
+    })
     if discord.curPanel then
       discord.curPanel:SetZPos( -1 )
       xlib.addToAnimQueue( discord.curPanel.SetVisible, discord.curPanel, false )
@@ -30,7 +35,12 @@ discord.catList.OnRowSelected = function( self, LineID, Line )
     xlib.animQueue_start()
     discord.curPanel = nPanel
   else
-    xlib.addToAnimQueue( "pnlSlide", { panel = nPanel, startx = 0, starty = 0, endx = -435, endy = 0, setvisible = false } )
+    xlib.addToAnimQueue("pnlSlide", {
+      panel = nPanel,
+      startx = 0, starty = 0,
+      endx = -435, endy = 0,
+      setvisible = false
+    })
     self:ClearSelection()
     discord.curPanel = nil
     xlib.animQueue_start()
@@ -68,7 +78,10 @@ xgui.hookEvent( "onProcessModules", nil, discord.processModules )
 xgui.addSettingModule( "Discord Muter", discord, "icon16/discord_muter.png" )
 
 ------------------------Settings Module-----------------------
-local discord_settings_panel = xlib.makelistlayout{ w = 415, h = 318, parent = discord.panel }
+local discord_settings_panel = xlib.makelistlayout{
+  w = 415, h = 318,
+  parent = discord.panel
+}
 
 xlib.makelabel{
   x = 5, y = 0,
