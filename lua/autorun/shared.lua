@@ -1,5 +1,10 @@
 AddCSLuaFile()
 
+include("discord/utils/logging.lua")
+include("discord/utils/messaging.lua")
+include("discord/utils/discord_connection.lua")
+include("discord/utils/http.lua")
+
 resource.AddFile("materials/icon256/mute.png")
 if (CLIENT) then
   shouldDrawMute = false
@@ -19,12 +24,6 @@ if (CLIENT) then
   end )
   return
 end
-
-include("discord/utils/locale.lua")
-include("discord/utils/messaging.lua")
-include("discord/utils/logging.lua")
-include("discord/utils/discord_connection.lua")
-include("discord/utils/http.lua")
 
 util.AddNetworkString("drawMute")
 util.AddNetworkString("connectDiscordID")
