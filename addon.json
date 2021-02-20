@@ -3,5 +3,5 @@
   "title": "Discord Muter",
   "type": "ServerContent",
   "tags": [ "fun", "realism" ],
-  "ignore": [ "*.psd", "*.vcproj", "*.svn*", "*.vscode*", "*.git*", "images/*", "*.md", "license" ]
+  "ignore": [ "*.psd", "*.vcproj", "*.svn*", "*.vscode*", "*.git*", "images/*", "*.md", "*.json", "license" ]
 }
