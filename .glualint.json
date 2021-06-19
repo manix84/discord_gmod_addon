@@ -25,7 +25,7 @@
   "prettyprint_spaceAfterLabel":      false,
   "prettyprint_spaceBeforeComma":     false,
   "prettyprint_spaceAfterComma":      true,
-  "prettyprint_semicolons":           false,
+  "prettyprint_semicolons":           true,
   "prettyprint_cStyle":               false,
   "prettyprint_rejectInvalidCode":    false,
   "prettyprint_indentation":          "  ",
