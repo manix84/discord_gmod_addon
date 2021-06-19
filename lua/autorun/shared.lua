@@ -80,6 +80,11 @@ function unmutePlayer(target_ply)
   end
 end
 
+-- UnMute Player Alias (for compatability)
+function unmute(target_ply)
+  unmutePlayer(target_ply)
+end
+
 function mutePlayer(target_ply, duration)
   if (target_ply && steamIDToDiscordIDConnectionTable[target_ply:SteamID()] && !isMuted(target_ply)) then
     httpFetch("mute", {
@@ -103,6 +108,11 @@ function mutePlayer(target_ply, duration)
       end
     end)
   end
+end
+
+-- Mute Player Alias (for compatability)
+function mute(target_ply)
+  mutePlayer(target_ply)
 end
 
 function commonRoundState()
