@@ -89,22 +89,21 @@ function mutePlayer(target_ply, duration)
   if (target_ply && steamIDToDiscordIDConnectionTable[target_ply:SteamID()] && !isMuted(target_ply)) then
     httpFetch("mute", {
       mute = true,
-      id = steamIDToDiscordIDConnectionTable[target_ply:SteamID()]},
-      function(res)
-        if (res && res.success) then
-          if (duration) then
-            playerMessage("MUTED_FOR_DURATION", target_ply, duration)
-            timer.Simple(duration, function()
-              unmutePlayer(target_ply)
-            end)
-          else
-            playerMessage("MUTED_FOR_ROUND", target_ply)
-          end
-          drawMuteIcon(target_ply, true)
-          mutedPlayerTable[target_ply] = true
-        elseif (res && res.errorMsg) then
-          announceMessage("ERROR_MESSAGE", res.errorMsg)
+      id = steamIDToDiscordIDConnectionTable[target_ply:SteamID()]
+    }, function(res)
+      if (res && res.success) then
+        if (duration) then
+          playerMessage("MUTED_FOR_DURATION", target_ply, duration)
+          timer.Simple(duration, function()
+            unmutePlayer(target_ply)
+          end)
+        else
+          playerMessage("MUTED_FOR_ROUND", target_ply)
         end
+        drawMuteIcon(target_ply, true)
+        mutedPlayerTable[target_ply] = true
+      elseif (res && res.errorMsg) then
+        announceMessage("ERROR_MESSAGE", res.errorMsg)
       end
     end)
   end
