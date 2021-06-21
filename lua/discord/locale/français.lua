@@ -9,7 +9,7 @@ local francais = {
   MULTIPLE_NAMES_FOUND = "J\'ai trouvé plus d'un utilisateur avec un nom comme '%s'. Essayez avec votre tag complet, exemple !discord Manix84#1234.",
   CONNECTION_SUCCESSFUL = "'%s' (%s) avec succès à '%s' .",
   WELCOME_CONNECTED = "Vous êtes connecté à Discord.",
-  AUTOMATIC_MATCH = "Tenter de faire correspondre votre nom, '%s' .",
-}
+  AUTOMATIC_MATCH = "Tenter de faire correspondre votre nom, '%s' ."
+};
 
-return francais
+return francais;

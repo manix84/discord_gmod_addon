@@ -10,7 +10,7 @@ local pirate = {
   MULTIPLE_NAMES_FOUND = "Thar be many %s's. What be yer full tag, EG: '!discord Manix84#1234'",
   CONNECTION_SUCCESSFUL = "'%s' (%s) successfully bound t' %s",
   WELCOME_CONNECTED = "Ye be connected t' Discord.",
-  AUTOMATIC_MATCH = "Attemptin' t' match yer name, %s",
-}
+  AUTOMATIC_MATCH = "Attemptin' t' match yer name, %s"
+};
 
-return pirate
+return pirate;

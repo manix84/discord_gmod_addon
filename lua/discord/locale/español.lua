@@ -9,7 +9,7 @@ local espanol = {
   MULTIPLE_NAMES_FOUND = "Se encontró más de un usuario con un nombre similar a '%s'. Intenta tu tag entero, EJ: '!discord Manix84#1234'",
   CONNECTION_SUCCESSFUL = "'%s' (%s) vinculado con éxito a '%s'",
   WELCOME_CONNECTED = "Estás conectado a Discord.",
-  AUTOMATIC_MATCH = "Intentando coincidir con tu nombre, '%s'",
-}
+  AUTOMATIC_MATCH = "Intentando coincidir con tu nombre, '%s'"
+};
 
-return espanol
+return espanol;

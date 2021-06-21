@@ -9,7 +9,7 @@ local turkce = {
   MULTIPLE_NAMES_FOUND = "'%s' gibi bir adı olan birden fazla kullanıcı bulundu. Tam etiketinizi deneyin. Örneğin: '!discord Manix84#1234'",
   CONNECTION_SUCCESSFUL = "'%s' (%s) başarıyla '%s'a bağlandı",
   WELCOME_CONNECTED = "Discord'a bağlandınız.",
-  AUTOMATIC_MATCH = "Adınızla eşleşmeye çalışılıyor, '%s'",
-}
+  AUTOMATIC_MATCH = "Adınızla eşleşmeye çalışılıyor, '%s'"
+};
 
-return turkce
+return turkce;

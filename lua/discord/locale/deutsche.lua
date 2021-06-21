@@ -9,9 +9,7 @@ local deutsche = {
   MULTIPLE_NAMES_FOUND = "Es wurde mehr als ein Benutzer mit einem Namen wie '%s' gefunden. Probieren Sie Ihren vollständigen Discord Tag aus, z. '!discord MANIX84#1234'",
   CONNECTION_SUCCESSFUL = "'%s' (%s) erfolgreich an '%s' gebunden.",
   WELCOME_CONNECTED = "Sie sind mit Discord verbunden.",
-  AUTOMATIC_MATCH = "Versuch, mit Ihrem Namen übereinzustimmen, '%s'",
+  AUTOMATIC_MATCH = "Versuch, mit Ihrem Namen übereinzustimmen, '%s'"
+};
 
-
-}
-
-return deutsche
+return deutsche;

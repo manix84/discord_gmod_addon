@@ -9,7 +9,7 @@ local english = {
   MULTIPLE_NAMES_FOUND = "Found more than one user with a name like '%s'. Try your full tag, EG: '!discord Manix84#1234'",
   CONNECTION_SUCCESSFUL = "'%s' (%s) successfully bound to '%s'",
   WELCOME_CONNECTED = "You are connected to Discord.",
-  AUTOMATIC_MATCH = "Attempting to match your name, '%s'",
-}
+  AUTOMATIC_MATCH = "Attempting to match your name, '%s'"
+};
 
-return english
+return english;
