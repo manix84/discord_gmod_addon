@@ -72,15 +72,15 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 
 |Variable|Optional/Default|Description|
 |--------|----------------|-----------|
-|discord_endpoint|"http://localhost:37405"|The location of your Discord Node Bot. If you are running them on the same machine, you shouldn't need to set this.|
-|discord_api_key|(optional)|The authorisation key Discord Node Bot. This is essential if you're running the node bot on another machine. It must also match, exactly, the API key set for the Node Bot.|
-|discord_name|"Discord"|The prefix displayed to your players when the add-on sends them a message (EG: [Discord] You've been muted until the end of the round.)|
-|discord_server_link|"https://discord.gg/"|The discord invite shown to players when they connect for the first time. (EG: [Discord] Join the discord server - https://discord.gg/yg6KJ8c/)|
-|discord_mute_round|1|Should a players be muted until the round ends? (1=Yes, 0=No)|
-|discord_mute_duration|5|How many seconds should a player be muted after death? (has no effect if discord_mute_round is enabled)|
-|discord_auto_connect|0|Should the add-on try to match the Steam Nickname to the Discord Nickname of a player? (1=Enabled, 0=Disabled)|
-|discord_language|"english"|Let's you specify the language the player sees. (Available Languages[github.com])|
-|discord_debug|0|Shows all the debug messages used to help build and maintain the add-on. (1=Enabled, 0=Disabled)|
+|`discord_endpoint`|"http://localhost:37405"|The location of your Discord Node Bot. If you are running them on the same machine, you shouldn't need to set this.|
+|`discord_api_key`|(optional)|The authorisation key Discord Node Bot. This is essential if you're running the node bot on another machine. It must also match, exactly, the API key set for the Node Bot.|
+|`discord_name`|"Discord"|The prefix displayed to your players when the add-on sends them a message (EG: [Discord] You've been muted until the end of the round.)|
+|`discord_server_link`|"https://discord.gg/"|The discord invite shown to players when they connect for the first time. (EG: [Discord] Join the discord server - https://discord.gg/yg6KJ8c/)|
+|`discord_mute_round`|1|Should a players be muted until the round ends? (1=Yes, 0=No)|
+|`discord_mute_duration`|5|How many seconds should a player be muted after death? (has no effect if discord_mute_round is enabled)|
+|`discord_auto_connect`|0|Should the add-on try to match the Steam Nickname to the Discord Nickname of a player? (1=Enabled, 0=Disabled)|
+|`discord_language`|"english"|Let's you specify the language the player sees. (Available Languages[github.com])|
+|`discord_debug`|0|Shows all the debug messages used to help build and maintain the add-on. (1=Enabled, 0=Disabled)|
 
 ## Credits
 - Marcel Transier - The original creator of [ttt_discord_bot](https://github.com/marceltransier/ttt_discord_bot.git), from which this is based.
