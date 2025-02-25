@@ -1,8 +1,10 @@
 AddCSLuaFile();
-include("discord/utils/logging.lua");
-include("discord/utils/messaging.lua");
-include("discord/utils/discord_connection.lua");
-include("discord/utils/http.lua");
+if Server then
+  include("discord/utils/logging.lua");
+  include("discord/utils/messaging.lua");
+  include("discord/utils/discord_connection.lua");
+  include("discord/utils/http.lua");
+end
 resource.AddFile("materials/icon256/mute.png");
 
 if (CLIENT) then
